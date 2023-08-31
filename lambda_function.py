@@ -4,11 +4,15 @@ import imaplib
 import json
 import pandas as pd
 import email
+import logging
 import re
 import boto3
-subject_line = "green dot"
 
-def scrape_outbox_or_inbox_w_subject(inbox_or_outbox, subject):
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',force=True)
+
+
+def scrape_outbox_or_inbox_w_subject(inbox_or_outbox, subject_line):
 
 
     # IMAP server settings for Gmail
@@ -30,20 +34,22 @@ def scrape_outbox_or_inbox_w_subject(inbox_or_outbox, subject):
     elif inbox_or_outbox == 'outbox':
         mailbox = '"[Gmail]/Sent Mail"'
     else:
-        print('Wrong string for inbox or outbox')
+        logging.info('Wrong string input for inbox or outbox')
         
     my_mail = imap.select(mailbox)
 
     # # Search for emails with a specific subject or other criteria
-    search_criteria = f'SUBJECT "{subject}"'
+    search_criteria = f'SUBJECT "{subject_line}"'
     status, response = imap.search(None, search_criteria)
 
     if status == 'OK':
         email_ids = response[0].split()
         if email_ids:
             print(f"You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
+            logging.info(f"You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
         else:
             print(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox}")
+            logging.info(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox}")
 
     # ---------------------------iterate through email_ids, get the whole message and append the data to msgs list.
 
@@ -101,7 +107,7 @@ def scrape_outbox_or_inbox_w_subject(inbox_or_outbox, subject):
         df['date'] = df['date'].apply(lambda x: x.isoformat())
 
         #create a new column that shows 1 if the message is a reply
-#         df['reply'] = np.where(df['subject'].str.contains('RE:', case=False, regex=True), 'Y', 'N')
+        # df['reply'] = np.where(df['subject'].str.contains('RE:', case=False, regex=True), 'Y', 'N')
         # Create a new column that shows 'Y' if the message is a reply, 'N' otherwise
         df['reply'] = df['subject'].apply(lambda x: 'Y' if 'RE:' in x.upper() else 'N')
 
@@ -143,6 +149,7 @@ def scrape_outbox_or_inbox_w_subject(inbox_or_outbox, subject):
             pass
     else:
         print('Wrong inbox or outbox variable')
+        logging.info('Wrong inbox or outbox variable')
         
     
     return(df)
@@ -194,16 +201,29 @@ def piece_together(outbox, inbox):
             pass
         
     return(outbox)
+# ------------------------------------packaging process into final function----------------------------------------
+
+def process(subject_line):
+    inbox = scrape_outbox_or_inbox_w_subject('inbox', subject_line)
+    inbox.name = 'inbox'
+    
+    outbox = scrape_outbox_or_inbox_w_subject('outbox', subject_line)
+    outbox.name = 'outbox'
+
+    df = piece_together(outbox, inbox)
+    
+    return(df)
 
 #----------------------------------------------update dynamodb------------------------------------------------------
-#boto3 client assumes CLI is setup properly with table made in the same region
+#boto3 client assumes CLI is setup properly with table made in the same region, and proper permissions to client for 
+#DynamoDB access
 
-def update_db():
+def update_db(frame, subject_line):
 
     table_name = 'gmail_scrape'
     dynamodb_client = boto3.client('dynamodb')
 
-    for index, row in df.iterrows():
+    for index, row in frame.iterrows():
 
         item  = {
             'subject': {'S': row['subject']},
@@ -217,24 +237,30 @@ def update_db():
         }
 
         dynamodb_client.put_item(TableName = table_name, Item = item)
+    
+    logging.info(f'{len(frame)} records have been updated in DynamoDB with a subject line of {subject_line}')
 
-    
-    
-    
+
+
+p_1 = process('customplanet')
+p_2 = process('green dot')
+update_db(p_1, 'customplanet')
+update_db(p_2, 'green dot')
+
+
 # def lambda_handler(event=None, context=None):
     
     
 # Get inbox/outbox into data frames
-inbox = scrape_outbox_or_inbox_w_subject('inbox', subject_line)
-inbox.name = 'inbox'
+# inbox = scrape_outbox_or_inbox_w_subject('inbox', subject_line)
+# inbox.name = 'inbox'
 
-outbox = scrape_outbox_or_inbox_w_subject('outbox', subject_line)
-outbox.name = 'outbox'
+# outbox = scrape_outbox_or_inbox_w_subject('outbox', subject_line)
+# outbox.name = 'outbox'
 
-df = piece_together(outbox, inbox)
-df.name = 'mail'
+# df = piece_together(outbox, inbox)
 
-update_db()
+# update_db()
     
 #     return {
 #         "statusCode": 200,
