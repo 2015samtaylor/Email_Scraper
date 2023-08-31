@@ -7,6 +7,7 @@ import email
 import logging
 import re
 import boto3
+from config import imap_password
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',force=True)
@@ -18,7 +19,7 @@ def scrape_outbox_or_inbox_w_subject(inbox_or_outbox, subject_line):
     # IMAP server settings for Gmail
     imap_server = 'imap.gmail.com'
     username = '2015samtaylor@gmail.com'
-    password = 'feqdwowrmaqthjkx'
+    password = imap_password
 
     # Connect to the Gmail IMAP server
     imap = imaplib.IMAP4_SSL(imap_server)
