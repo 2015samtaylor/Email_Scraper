@@ -4,7 +4,7 @@ This Python script scrapes email responses and stores them in an AWS DynamoDB No
 
 ## Prerequisites
 
-- Python 3.x
+- Python 3.11
 - Required Python packages: `imaplib`, `json`, `pandas`, `email`, `boto3` (for AWS DynamoDB)
 - [AWS](https://aws.amazon.com/) account with DynamoDB configured
 
