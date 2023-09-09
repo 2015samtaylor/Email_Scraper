@@ -1,4 +1,4 @@
-# Email Scraper and NoSQL Database Updater
+# Email Scraper and DynamoDB Updater
 
 This Python script scrapes email responses and stores them in an AWS DynamoDB NoSQL database. It's designed to organize and manage email thread data.
 
