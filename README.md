@@ -14,7 +14,7 @@ This Python script scrapes email responses and stores them in an AWS DynamoDB No
 
 2. Customize the script by updating your Gmail IMAP settings, subject lines, and DynamoDB table name.
 
-3. Run the script: `python your_script_name.py`.
+3. Run the script: `python lambda_function.py`.
 
 4. The script scrapes specified emails, assembles threads, and updates DynamoDB.
 
