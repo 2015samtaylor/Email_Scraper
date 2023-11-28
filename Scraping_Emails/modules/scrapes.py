@@ -3,19 +3,19 @@ import json
 import pandas as pd
 import email
 import logging
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 import re
-from config import imap_password_customplanet, db_username, db_password
-email_address = 'team@customplanet.com'
+from config import db_username, db_password
+
 
 class scrape:
 
-    def scrape_msgs_outbox_or_inbox(inbox_or_outbox, subject_line):
+    def scrape_msgs_outbox_or_inbox(inbox_or_outbox, subject_line, email_address, email_pass):
 
         # IMAP server settings for Gmail
         imap_server = 'imap.gmail.com'
         username = email_address
-        password = imap_password_customplanet
+        password = email_pass
 
         # Connect to the Gmail IMAP server
         imap = imaplib.IMAP4_SSL(imap_server)
@@ -72,6 +72,7 @@ class scrape:
                     my_msg = email.message_from_bytes(response_part[1])
 
                     email_dict = {
+                        'recipient_id': '',
                         'subject': my_msg['subject'],
                         'from': my_msg['from'],
                         'to': my_msg['to'],
@@ -90,14 +91,26 @@ class scrape:
                                     body = part.get_payload(decode=True).decode('utf-8')
                                 except UnicodeDecodeError:
                                     body = part.get_payload(decode=True).decode('latin-1', 'replace')
+                                
+                                email_dict['body'] = body
 
                                 # If it's 'text/html', extract only the text content
                                 if content_type == 'text/html':
                                     soup = BeautifulSoup(body, 'html.parser')
-                                    body = soup.get_text(separator='\n', strip=True)
 
-                                email_dict['first_message'] = body
-                                break  # Assuming you want only the first plain text or HTML body
+                                    #Extract body text of initial message. 
+                                    first_message = soup.get_text(separator='\n', strip=True)
+                                    email_dict['first_message'] = first_message
+                                    
+                                    # Find the comment tag and extract the UUID
+                                    comment = soup.find(text=lambda text: isinstance(text, Comment) and 'UUID:' in text)
+                                    if comment:
+                                        uuid = comment.split(':')[-1].strip()
+                                        email_dict['recipient_id'] = uuid
+                                    else:
+                                        # no uuid
+                                        pass
+                                break  # The break ensures that this is capped at the first_message
 
                     else:
                         # If it's not multipart, try to get the payload directly
@@ -112,14 +125,12 @@ class scrape:
         df = pd.DataFrame(email_data)
 
         return(df)
-
-    
+        
     def cleanse_frame(df, inbox_or_outbox):
             
         try:
             #change date to datetime, in order to create unique _id reference of when the email occured
             df['date'] = pd.to_datetime(df['date'], errors='coerce', utc=True)
-            df['recipient_id'] = df['date'].dt.strftime('%m%d%Y%H%M%S')
             df['date'] = df['date'].apply(lambda x: x.isoformat())
             
 
@@ -213,7 +224,7 @@ class scrape:
                 outbox.loc[i, 'reply'] = 'Y'
 
             except (KeyError, IndexError):
-                print('Inbox is empty')
-
+                pass
+              
         return(outbox)
 
