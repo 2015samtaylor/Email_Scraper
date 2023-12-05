@@ -6,9 +6,9 @@ import base64
 
 class SendMail:
 
-    def send(EMAIL_ADDRESS_FROM, EMAIL_PASS, school, sport, png_path, email, unique_identifier):
+    def send(EMAIL_ADDRESS_FROM, EMAIL_PASS, global_subject_line, school, sport, png_path, email, unique_identifier):
         msg = EmailMessage()
-        msg['Subject'] = f'Local {sport} Jerseys for {school}'
+        msg['Subject'] = global_subject_line.format(sport, school)
         msg['From'] = EMAIL_ADDRESS_FROM
         msg['To'] = email
 
@@ -77,7 +77,7 @@ class SendMail:
                     </ul>
                     <p>Ready to get started?</p>
                     <p>Visit our website or give us a call to request a free sample and explore our catalog: <a href="http://customplanet.com" class="underline">customplanet.com</a>.</p>
-                    <!--Hidden UUID: {unique_identifier}-->
+                    <input type="hidden" id="hidden-uuid" value="{unique_identifier}">
                      <div class="image-container">
                         <img src="https://lh3.googleusercontent.com/p/AF1QipMOx-lGQC-IlQwU0kBo5uP18BkuLrDoKAKGDS9h=s1360-w1360-h1020" alt="Customplanet Culture 1" width="300px">
                         <img src="https://lh3.googleusercontent.com/p/AF1QipNLF0i0wl_6Y4VF9vHJKpjGtMHhgT70_ADLww8j=s1360-w1360-h1020" alt="Customplanet Culture 2" width="300px">

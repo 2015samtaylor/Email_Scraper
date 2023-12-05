@@ -5,7 +5,9 @@ import email
 import logging
 from bs4 import BeautifulSoup, Comment
 import re
-from config import db_username, db_password
+db_username = 'admin'
+db_password = 'Pretty11'
+# from config import db_username, db_password
 
 
 class scrape:
@@ -42,7 +44,7 @@ class scrape:
         if status == 'OK':
             email_ids = response[0].split()
             if email_ids:
-                print(f"You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
+                print(f"You have {len(email_ids)} email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
                 logging.info(f"You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
             else:
                 print(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox}")
@@ -80,51 +82,68 @@ class scrape:
                         'first_message': '',
                         'reply_thread': ''
                     }
-
+                    #inbox messages will always be caught by multipart
                     if my_msg.is_multipart():
                         for part in my_msg.walk():
                             content_type = part.get_content_type()
 
-                            # Check for both 'text/plain' and 'text/html'
-                            if content_type in ['text/plain', 'text/html']:
+                            #text/plain is initially available and then defaults to HTML.
+                            # Check for both 'text/plain' and 'text/html' and get the body.  is ignored
+                            if content_type in ['text/html']:  #'text/plain'
                                 try:
                                     body = part.get_payload(decode=True).decode('utf-8')
                                 except UnicodeDecodeError:
                                     body = part.get_payload(decode=True).decode('latin-1', 'replace')
                                 
-                                email_dict['body'] = body
-
                                 # If it's 'text/html', extract only the text content
-                                if content_type == 'text/html':
-                                    soup = BeautifulSoup(body, 'html.parser')
+                                # if content_type in ['text/plain', 'text/html']:
+                                soup = BeautifulSoup(body, 'html.parser')
 
-                                    #Extract body text of initial message. 
-                                    first_message = soup.get_text(separator='\n', strip=True)
-                                    email_dict['first_message'] = first_message
-                                    
-                                    # Find the comment tag and extract the UUID
-                                    comment = soup.find(text=lambda text: isinstance(text, Comment) and 'UUID:' in text)
-                                    if comment:
-                                        uuid = comment.split(':')[-1].strip()
-                                        email_dict['recipient_id'] = uuid
-                                    else:
-                                        # no uuid
-                                        pass
-                                break  # The break ensures that this is capped at the first_message
+                                #Clean HTML for NLP purposes and assign to reply_thread
+                                cleaned_text = soup.get_text(separator=' ', strip=True)
+                                email_dict['reply_thread'] = cleaned_text
+                                
+                                uuid_input = soup.find_all('input', {'id': lambda x: x and 'hidden-uuid' in x})
 
-                    else:
-                        # If it's not multipart, try to get the payload directly
+                                # Check if any UUID input is found
+                                if uuid_input:
+                                    uuid = uuid_input[0]['value']
+                                    email_dict['recipient_id'] = uuid
+                                else:
+                                    pass
+                                    #no uuid
+                                break  #As to not continue on to other multiparts
+
+                            #outbox defaults to the else block everytime
+                    else:   #scraping outbox will never be multipart, so this is where the first message is needed
+                        # Get the payload directly
                         try:
                             body = my_msg.get_payload(decode=True).decode('utf-8')
                         except UnicodeDecodeError:
                             body = my_msg.get_payload(decode=True).decode('latin-1', 'replace')
-                        email_dict['first_message'] = body
+                        
+                        soup = BeautifulSoup(body, 'html.parser')
 
+                        #Clean HTML for NLP purposes and assign to reply_thread
+                        cleaned_text = soup.get_text(separator=' ', strip=True)
+                        email_dict['first_message'] = cleaned_text
+
+                        uuid_input = soup.find_all('input', {'id': lambda x: x and 'hidden-uuid' in x})
+
+                        # Check if any UUID input is found
+                        if uuid_input:
+                            uuid = uuid_input[0]['value']
+                            email_dict['recipient_id'] = uuid
+                        else:
+                            pass
+                            #no uuid
+
+                    #append email_dict at the end no matter what
                     email_data.append(email_dict)
 
         df = pd.DataFrame(email_data)
 
-        return(df)
+        return(df, soup)
         
     def cleanse_frame(df, inbox_or_outbox):
             
@@ -186,45 +205,20 @@ class scrape:
         
     # ------------------------------------------Piece together replies to outbox emails------------------------------- 
 
-    #Three things need to happen to be pieced together
-    # 1. subject of inbox message contains sent message subject
-    # 2. Message must be a RE:
-    # 3. The outbox 'to' email must be the same as inbox 'from' email
-
-
     def piece_together(outbox, inbox):
 
-        for i in range(len(outbox)):
-            idx_ref = outbox.iloc[i]
-            sent_message_subject = idx_ref['subject']
-            sent_message_to = idx_ref['to']
+        box = pd.merge(outbox, inbox, on = 'recipient_id', how = 'left', suffixes=('_outbox', '_inbox'))
 
-            try:
-                # Move the entire block of code inside the try block
-                message = inbox.loc[(inbox['subject'].str.contains(sent_message_subject, case=False, regex=True)) & (inbox['reply'] == 'Y')]
+        box = box[['recipient_id', 'subject_outbox', 'from_outbox', 'to_outbox',
+            'date_outbox', 'first_message_outbox', 'reply_inbox', 'reply_thread_inbox']]
 
-                # check if the initial sent to address is the same as the reply from. (Confirming the reply)
-                if not message.empty:
-                    if message['from'].values[0] == sent_message_to:
-                        pass
-                    else:
-                        message = message.drop(index=message.index)
+        box = box.rename(columns = {'subject_outbox': 'subject', 'from_outbox': 'from', 'to_outbox': 'to',
+            'date_outbox': 'date', 'first_message_outbox': 'first_message', 'reply_inbox': 'reply', 'reply_thread_inbox': 'reply_thread'})
 
-                body = message['first_message'].values[0]
-                date = str(message['date'].values[0])
+        box['reply'] = box['reply'].fillna('N')
+        box['reply_thread'] = box['reply_thread'].fillna('')
 
-                re_dict = {
-                    'date': date,
-                    'thread': body
-                }
+        box['date'] = pd.to_datetime(box['date'])
 
-                re_dict = json.dumps(re_dict)
-
-                outbox.loc[i, 'reply_thread'] = re_dict
-                outbox.loc[i, 'reply'] = 'Y'
-
-            except (KeyError, IndexError):
-                pass
-              
-        return(outbox)
+        return(box)
 
