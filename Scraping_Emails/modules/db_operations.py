@@ -118,8 +118,10 @@ class DatabaseConnector:
         if not new_updates.empty:
             self.send(new_updates, update_column=None)
             print('New records inserted')
+            logging.info(f'New records inserted - {len(new_updates)}')
         else:
             print('No new records to send')
+            logging.info('No new records to send')
         
         return(new_updates)
 

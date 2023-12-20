@@ -4,15 +4,19 @@ import pandas as pd
 import email
 import logging
 from bs4 import BeautifulSoup, Comment
+from textblob import TextBlob
 import re
-db_username = 'admin'
-db_password = 'Pretty11'
+from datetime import datetime, timedelta
 # from config import db_username, db_password
 
 
 class scrape:
 
-    def scrape_msgs_outbox_or_inbox(inbox_or_outbox, subject_line, email_address, email_pass):
+    def scrape_msgs_outbox_or_inbox(inbox_or_outbox, subject_line, email_address, email_pass, start_date):
+
+        # Convert start_date to IMAP date format
+        start_date_formatted = datetime.strptime(start_date, '%m/%d/%Y').strftime('%d-%b-%Y')
+        end_date_formatted = (datetime.now() - timedelta(days=1)).strftime('%d-%b-%Y')
 
         # IMAP server settings for Gmail
         imap_server = 'imap.gmail.com'
@@ -38,11 +42,14 @@ class scrape:
         my_mail = imap.select(mailbox)
 
         # # Search for emails with a specific subject or other criteria
-        search_criteria = f'SUBJECT "{subject_line}"'
+         # Search for emails with a specific subject and within the date range
+        search_criteria = f'SUBJECT "{subject_line}" SINCE {start_date_formatted} BEFORE {end_date_formatted}'
         status, response = imap.search(None, search_criteria)
 
         if status == 'OK':
             email_ids = response[0].split()
+            #limit to 100 for testing
+            # email_ids = email_ids[:100]
             if email_ids:
                 print(f"You have {len(email_ids)} email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
                 logging.info(f"You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
@@ -143,7 +150,7 @@ class scrape:
 
         df = pd.DataFrame(email_data)
 
-        return(df, soup)
+        return(df)
         
     def cleanse_frame(df, inbox_or_outbox):
             
@@ -221,4 +228,21 @@ class scrape:
         box['date'] = pd.to_datetime(box['date'])
 
         return(box)
+
+    
+    def assign_sentiment(thread):
+
+        # Assuming 'df' is your DataFrame and 'text_column' is the column with text data
+        thread['sentiment'] = thread['reply_thread'].apply(lambda x: TextBlob(str(x)).sentiment.polarity)
+        
+        # You can categorize the sentiment if needed
+        thread['sentiment_category'] = pd.cut(thread['sentiment'], bins=3, labels=['negative', 'neutral', 'positive'])
+
+        # # Display the DataFrame with sentiment scores
+        thread.loc[(thread['sentiment'] == 0) & (thread['reply'] == 'N'), 'sentiment_category'] = None
+
+        #drop everything that does not have a recipient_id
+        thread = thread[thread['recipient_id'] != '']
+
+        return(thread)
 
