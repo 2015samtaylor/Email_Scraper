@@ -37,27 +37,67 @@ def get_intro_template(school, unique_identifier, sport):
             }}
 
             .image-container {{
+                /* Images stored in the same container will be stacked vertically based on flex direction */
+                /* image-container settings are dominant over social-icons*/
                 display: flex;
-                justify-content: space-between;
+                flex-direction: row;  /* Change this to column to stack vertically */
+                align-items: center;  /* Align items to the center */
+                margin-top: 20px;
             }}
+
+            .social-icons {{
+                display: flex;
+                flex-direction: column; /* Stack the icons vertically */
+                align-items: center;   /* Center the icons horizontally */
+                margin-left: 10px;     /* Adjust as needed for spacing */
+            }}
+
+            .social-icons a {{
+                display: block;
+                margin-top: 10px; /* Adjust the spacing as needed */
+            }}
+
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>We are the supplier for all of your Baseball Apparel Needs!</h1>
-            <p>Ranging from <span class="underline"> Customized Majestic Jerseys, to hats, pants, and other apparel</span>. Elevate your team's spirit with our high-quality, personalized jerseys designed to make a statement on the field.</p>
+            <h1>Little League Season Is Coming Fast!!</h1>
+            <p>At Customplanet we can outfit your team or league head to toe. We have league and team discounts, and are ready to ship! Jerseys are only $23 with your player names and numbers on them. </p>
       
-            <p>Ready to get started?</p>
-            <p>Visit our website or give us a call to request a free sample and explore our catalog: <a href="https://customplanet.com/MLB-Jerseys-Shirts.aspx" class="underline">customplanet.com</a>.</p>
+            <p>Hurry, because the Offical MLB jerseys sell out every year!</p>
+            <p>Visit our website <a href="https://customplanet.com/Majestic-Jerseys.aspx">www.customplanet.com</a> or give us a call at <a href="(801) 810-8337" class="underline"> (801) 810-8337</a></p>
+
+
             <input type="hidden" id="hidden-uuid" value="{unique_identifier}">
+
             <div class="image-container">
-              <a href="https://lh3.googleusercontent.com/drive-viewer/AEYmBYQmuQ4J-EYUpisQVdPrz3MmkOmf2SOnDkcm3INFs33UD-pTMvOO78vLoVOsJg91gPgdivzWj76jMHiZvdQaN7AQzE3MCA=s1600?source=screenshot.guru"> 
-                <img src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYQmuQ4J-EYUpisQVdPrz3MmkOmf2SOnDkcm3INFs33UD-pTMvOO78vLoVOsJg91gPgdivzWj76jMHiZvdQaN7AQzE3MCA=s1600" alt="Customplanet Culture 1" width="600px">
-              </a>  
+                <a href="https://www.customplanet.com/" target="_blank">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9Jolo0qsbBbemgBEHbuhLUnXtFVxuA9FPXuZj07YnIA&s" alt="Customplanet Logo" width="100px">
+                </a>
+
+                <div class="social-icons">
+                    <a href="https://twitter.com/customplanet" target="_blank">
+                        <img src="https://1000logos.net/wp-content/uploads/2017/02/Twitter-Logosu.png" alt="Twitter Logo" width="95px">
+                    </a>
+
+                    <a href="https://www.facebook.com/CustomPlanetDotCom/" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Facebook_icon.svg/2048px-Facebook_icon.svg.png" alt="Facebook Logo" width="70px">
+                    </a>
+
+                     <a href="https://www.instagram.com/customplanetinc/" target="_blank">
+                        <img src="https://cdn.mos.cms.futurecdn.net/6dDoc8GV9fYUPExgLYPqqT-1200-80.jpg" alt="Instagram Logo" width="110px">
+                    </a>
+
+                </div>
+
             </div>
-            <p class="footer">Best Regards,<br>Your Team at Customplanet</p>
-            <p class="sport-reference">Baseball season is nearly here!</p>
-            <p>For inquiries, contact us at: <a href="(801) 810-8337" class="underline"> (801) 810-8337</a></p>
+
+            <div class="image-container" style="margin-top: 30px;">
+                <a href="https://customplanet.com/Majestic-Jerseys.aspx"> 
+                    <img src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYTKXa_nsVD5GVck4zaWvwmpfrukGkeTlkBFKcmDKI7STQgyo-jC63vBtIxopsrlJg-lzo79ob5sqzDudKbBJX876oQ=s1600" alt="Majestic Gear" width="600px"> 
+                </a>
+            </div>
+
         </div>
     </body>
     </html>

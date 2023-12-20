@@ -4,6 +4,7 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy import update
 import urllib
+import logging
 
 class DatabaseConnector:
 
