@@ -16,7 +16,7 @@ class scrape:
 
         # Convert start_date to IMAP date format
         start_date_formatted = datetime.strptime(start_date, '%m/%d/%Y').strftime('%d-%b-%Y')
-        end_date_formatted = (datetime.now() - timedelta(days=1)).strftime('%d-%b-%Y')
+        end_date_formatted = (datetime.now() - timedelta(days=0)).strftime('%d-%b-%Y')
 
         # IMAP server settings for Gmail
         imap_server = 'imap.gmail.com'

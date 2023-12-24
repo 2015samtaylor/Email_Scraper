@@ -85,7 +85,6 @@ class DatabaseConnector:
 
                 # Execute the update statement
                 connection.execute(update_stmt)
-                print('Reply_Thread updated')
 
 
 
@@ -118,7 +117,7 @@ class DatabaseConnector:
 
         if not new_updates.empty:
             self.send(new_updates, update_column=None)
-            print('New records inserted')
+            print(f'New records inserted - {len(new_updates)}')
             logging.info(f'New records inserted - {len(new_updates)}')
         else:
             print('No new records to send')
@@ -136,6 +135,9 @@ class DatabaseConnector:
 
         # Filter rows where 'reply_thread' is not empty
         pre_existing_thread_updates = pre_existing_thread_updates[pre_existing_thread_updates['reply_thread'] != '']
+
+        print(f'{len(pre_existing_thread_updates)} threads have been updated')
+        logging.info(f'{len(pre_existing_thread_updates)} threads have been updated')
 
         # Check if there are pre-existing threads to update, and if they are not empty
         if pre_existing_thread_updates.empty == True:
