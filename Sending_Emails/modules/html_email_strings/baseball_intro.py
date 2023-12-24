@@ -57,6 +57,16 @@ def get_intro_template(school, unique_identifier, sport):
                 margin-top: 10px; /* Adjust the spacing as needed */
             }}
 
+             .unsubscribe-link {{
+            font-size: 13px;
+            color: #777;
+            text-decoration: none;
+            }}
+
+            .unsubscribe-link:hover {{
+                text-decoration: underline;
+            }}
+
         </style>
     </head>
     <body>
@@ -65,7 +75,7 @@ def get_intro_template(school, unique_identifier, sport):
             <p>At Customplanet we can outfit your team or league head to toe. We have league and team discounts, and are ready to ship! Jerseys are only $23 with your player names and numbers on them. </p>
       
             <p>Hurry, because the Offical MLB jerseys sell out every year!</p>
-            <p>Visit our website <a href="https://customplanet.com/Majestic-Jerseys.aspx">www.customplanet.com</a> or give us a call at <a href="(801) 810-8337" class="underline"> (801) 810-8337</a></p>
+            <p>Visit our website <a href="https://customplanet.com/Majestic-Jerseys.aspx">www.customplanet.com</a> or give us a call/text at <a href="(801) 810-8337" class="underline"> (801) 810-8337</a></p>
 
 
             <input type="hidden" id="hidden-uuid" value="{unique_identifier}">
@@ -91,14 +101,23 @@ def get_intro_template(school, unique_identifier, sport):
                 </div>
 
             </div>
-
+            
             <div class="image-container" style="margin-top: 30px;">
                 <a href="https://customplanet.com/Majestic-Jerseys.aspx"> 
-                    <img src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYTKXa_nsVD5GVck4zaWvwmpfrukGkeTlkBFKcmDKI7STQgyo-jC63vBtIxopsrlJg-lzo79ob5sqzDudKbBJX876oQ=s1600" alt="Majestic Gear" width="600px"> 
+                    <img src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYSC8neSpHDVZ85b0HNeRJGBPIzhCrSENTUy4I552Rhz1OrdKTQXSFBFhb0JlBgQxww1Yd-ydVUkKmAygDhhEfi-cT0NIQ=s1600" alt="Majestic Gear" width="600px"> 
                 </a>
             </div>
 
+             <!-- Unsubscribe link -->
+            <p class="unsubscribe-link">
+                <a href="https://customplanet.com/index.php?route=common/unsubscribemail" target="_blank" class="unsubscribe-link">
+                    If you wish to unsubscribe, click here.
+                </a>
+            </p>
         </div>
     </body>
     </html>
     '''
+
+
+#embed opt out link
