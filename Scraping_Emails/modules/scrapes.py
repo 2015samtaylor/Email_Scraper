@@ -82,12 +82,14 @@ class scrape:
 
                     email_dict = {
                         'recipient_id': '',
+                        'message_delivery': '',
                         'subject': my_msg['subject'],
                         'from': my_msg['from'],
                         'to': my_msg['to'],
                         'date': my_msg['Date'],
                         'first_message': '',
                         'reply_thread': ''
+
                     }
                     #inbox messages will always be caught by multipart
                     if my_msg.is_multipart():
@@ -119,8 +121,23 @@ class scrape:
                                 else:
                                     pass
                                     #no uuid
-                                break  #As to not continue on to other multiparts
+                                    # break  #As to not continue on to other multiparts
 
+                            #This bit is present for some automated emails systems notifying of rejection.
+                            elif content_type in ['multipart/report']:
+
+                                # The multipart/report may have subparts
+                                for subpart in part.walk():
+                                    if subpart.get_content_type() == "message/delivery-status":
+
+                                        subpart_payload = subpart.get_payload(i=1)
+                                        message_status = subpart_payload._headers[1]
+                                        email_dict['message_devivery'] = message_status
+
+                                    else:
+                                        pass
+
+                              
                             #outbox defaults to the else block everytime
                     else:   #scraping outbox will never be multipart, so this is where the first message is needed
                         # Get the payload directly
