@@ -10,7 +10,7 @@ from modules.html_email_strings.baseball_intro import get_intro_template
 class SendMail:
 
 
-    def send(EMAIL_ADDRESS_FROM, EMAIL_PASS, global_subject_line, school, sport, email, unique_identifier):
+    def send(EMAIL_ADDRESS_FROM, EMAIL_PASS, global_subject_line, school, sport, email):
         msg = EmailMessage()
         msg['Subject'] = global_subject_line.format(sport, school)
         msg['From'] = EMAIL_ADDRESS_FROM
@@ -25,9 +25,7 @@ class SendMail:
         # except FileNotFoundError:
         #     image_base64 = ''
             
-        body = get_intro_template(school, unique_identifier, sport)
-
-        # body = schools_intro_template.format(school, unique_identifier, sport)
+        body = get_intro_template(school, sport)
 
         # Set the content as HTML
         msg.set_content(body, subtype='html')
@@ -42,10 +40,6 @@ class SendMail:
             # Handle the specific exception
             print(f"Recipient error for {email}: {e}")
         
-        # except Exception as e:
-        #     # Handle other exceptions
-        #     print(f"An error occurred: {e}")
-
 
     def get_next_50(email_history=None):
 
@@ -53,7 +47,6 @@ class SendMail:
         df = df.drop_duplicates(subset='email')
         df = df.reset_index(drop = True)
 
-    
         #this means email_history is undeclared as a variable, the process broke. Start by reading in the csv   
         if email_history is None:
             email_history = pd.read_csv(os.getcwd() + '\\output.csv')

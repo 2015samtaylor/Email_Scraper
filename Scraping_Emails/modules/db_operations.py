@@ -57,14 +57,6 @@ class DatabaseConnector:
 
         return(dtypes)
 
-    # def send(self, frame):
-    #     engine = self.generate_sql_engine()
-    #     dtypes = self.get_dtypes(self.sql_db, self.sql_table)
-
-    #     # Create or replace the table with the correct data types
-    #     frame.to_sql(self.sql_table, con=engine, index=False, dtype=dtypes, if_exists='append')
-
-    #In order to only update values for the reply_thread 
 
 
     def update_column(self, engine, frame, update_column):
@@ -79,7 +71,7 @@ class DatabaseConnector:
                 # Build an update query
                 update_stmt = (
                     update(table)
-                    .where(table.c['recipient_id'] == row['recipient_id'])
+                    .where(table.c['message_id_outbox'] == row['message_id_outbox'])
                     .values({update_column: row[update_column]})
                 )
 
@@ -102,16 +94,16 @@ class DatabaseConnector:
 
 
     def append_new_records(self, thread):
-        # There are all the ids that can be maintained from the scrape because an email was sent out. (existing recipient_id)
-        distinct_ids_email_history = self.SQL_query('Select distinct recipient_id FROM [emailcampaign].[dbo].[email_history]')
+        # There are all the ids that can be maintained from the scrape because an email was sent out. (existing message_id_outbox)
+        distinct_ids_email_history = self.SQL_query('Select distinct message_id_outbox FROM [emailcampaign].[dbo].[email_history]')
 
-        # Narrow down records to match email send history on recipient_id
-        new_updates = pd.merge(thread, distinct_ids_email_history, on='recipient_id')
+        # Narrow down records to match email send history on message_id_outbox
+        new_updates = pd.merge(thread, distinct_ids_email_history, on='message_id_outbox')
         # Narrow down further to only new records and then append.
-        existing_ids_thread = self.SQL_query('Select distinct recipient_id FROM [emailcampaign].[dbo].[thread]')
+        existing_ids_thread = self.SQL_query('Select distinct message_id_outbox FROM [emailcampaign].[dbo].[thread]')
 
         # Filter down to only get new_updates, then call on send method
-        new_updates = pd.merge(new_updates, existing_ids_thread, on='recipient_id', how='outer', indicator=True)
+        new_updates = pd.merge(new_updates, existing_ids_thread, on='message_id_outbox', how='outer', indicator=True)
         new_updates = new_updates.loc[new_updates['_merge'] == 'left_only']
         new_updates = new_updates.drop(columns=['_merge'])
 
@@ -128,10 +120,10 @@ class DatabaseConnector:
     def update_reply_thread(self, thread):
 
         # Retrieve existing recipient_ids from the 'thread' table
-        existing_ids_thread = self.SQL_query(f'SELECT DISTINCT recipient_id FROM {self.sql_db}.dbo.{self.sql_table}')
+        existing_ids_thread = self.SQL_query(f'SELECT DISTINCT message_id_outbox FROM {self.sql_db}.dbo.{self.sql_table}')
 
         # Merge the 'thread' table with the provided 'thread' DataFrame
-        pre_existing_thread_updates = pd.merge(thread, existing_ids_thread, on='recipient_id')
+        pre_existing_thread_updates = pd.merge(thread, existing_ids_thread, on='message_id_outbox')
 
         # Filter rows where 'reply_thread' is not empty
         pre_existing_thread_updates = pre_existing_thread_updates[pre_existing_thread_updates['reply_thread'] != '']

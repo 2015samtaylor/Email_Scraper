@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup, Comment
 from textblob import TextBlob
 import re
 from datetime import datetime, timedelta
-import numpy as np
 # from config import db_username, db_password
 
 
@@ -72,68 +71,38 @@ class scrape:
     
 
     #     -------------------------Cleanse the msgs list and extract what we want-------------------
+#The first change that needs to occur here is create the dictionary no matter what
 
-                # if isinstance(response_part, bytes):
-                #     my_msg = email.message_from_bytes(response_part)
-                #     print(f'This is my message decoded from bytes {my_msg}')
-                #     text_content = scrape.extract_text_from_email_bytes(my_msg)
-                #     print(text_content)
-
-                #     #If the text_content is empty, no reason to append. The email_data.append needs to be outside of this loop. Because it appends multiple empty text contents
-                #     print('Email data has been appended from bytes')
-                #     email_data.append(text_content)
-    
-    def decode_message(part_or_my_msg):
-        
-        try:
-            body = part_or_my_msg.get_payload(decode=True).decode('utf-8')
-        except UnicodeDecodeError:
-            body = part_or_my_msg.get_payload(decode=True).decode('latin-1', 'replace')
-        
-        # If it's 'text/html', extract only the text content
-        # if content_type in ['text/plain', 'text/html']:
-        soup = BeautifulSoup(body, 'html.parser')
-
-        #Clean HTML for NLP purposes and assign to reply_thread
-        cleaned_text = soup.get_text(separator=' ', strip=True)
-        return(cleaned_text)
-       
-                                
 
 
 
     def create_msg_frame(msgs):
         email_data = []
 
-        for i, msg in enumerate(msgs[::-1]):  # start from the most recent message
-            print(i)
-            if isinstance(msg, tuple):
-                response_part = msg
-            else:   
-                pass
-
+        for msg in msgs[::-1]:  # start from the most recent message
             for response_part in msg:
-              
-              
-                
+
+                print(type(response_part))
+
+                if isinstance(response_part, bytes):
+                    my_msg = email.message_from_bytes(response_part)
+                    text_content = scrape.extract_text_from_email_bytes(my_msg)
+                    print(text_content)
+                    print('Email data has been appended from bytes')
+                    email_data.append(text_content)
+                    
+
                 if isinstance(response_part, tuple):
 
-
-                # if isinstance(msg_tuple, tuple) and all(isinstance(part, bytes) for part in msg_tuple):
-
-                    # my_msg = email.message_from_bytes(response_part[1])
                     my_msg = email.message_from_bytes(response_part[1])
 
-                    #maybe look into a header that has a delivery status here. 
                     email_dict = {
+                        'recipient_id': '',
+                        'message_delivery': '',
                         'subject': my_msg['subject'],
                         'from': my_msg['from'],
                         'to': my_msg['to'],
                         'date': my_msg['Date'],
-                        'message_id' : my_msg['Message-ID'],
-                        'references': my_msg['References'],
-                        'in_reply_to': my_msg['In-Reply-To'],
-                        'message_delivery': '',
                         'first_message': '',
                         'reply_thread': ''
 
@@ -146,11 +115,31 @@ class scrape:
                             #text/plain is initially available and then defaults to HTML.
                             # Check for both 'text/plain' and 'text/html' and get the body.  is ignored
                             if content_type in ['text/html']:  #'text/plain'
+                                try:
+                                    body = part.get_payload(decode=True).decode('utf-8')
+                                except UnicodeDecodeError:
+                                    body = part.get_payload(decode=True).decode('latin-1', 'replace')
+                                
+                                # If it's 'text/html', extract only the text content
+                                # if content_type in ['text/plain', 'text/html']:
+                                soup = BeautifulSoup(body, 'html.parser')
 
-                                cleaned_text = scrape.decode_message(part)
+                                #Clean HTML for NLP purposes and assign to reply_thread
+                                cleaned_text = soup.get_text(separator=' ', strip=True)
                                 email_dict['reply_thread'] = cleaned_text
+                                
+                                uuid_input = soup.find_all('input', {'id': lambda x: x and 'hidden-uuid' in x})
 
-                            #This bit is present for some automated emails systems notifying of rejection. Maybe think about removing from 
+                                # Check if any UUID input is found
+                                if uuid_input:
+                                    uuid = uuid_input[0]['value']
+                                    email_dict['recipient_id'] = uuid
+                                else:
+                                    pass
+                                    #no uuid
+                                    # break  #As to not continue on to other multiparts
+
+                            #This bit is present for some automated emails systems notifying of rejection.
                             elif content_type in ['multipart/report']:
 
                                 # The multipart/report may have subparts
@@ -159,33 +148,57 @@ class scrape:
 
                                         subpart_payload = subpart.get_payload(i=1)
                                         message_status = subpart_payload._headers[1]
-                                        email_dict['message_delivery'] = message_status
+                                        email_dict['message_devivery'] = message_status
 
                                     else:
                                         pass
+
                               
                             #outbox defaults to the else block everytime
                     else:   #scraping outbox will never be multipart, so this is where the first message is needed
-                        cleaned_text = scrape.decode_message(my_msg)
+                        # Get the payload directly
+                        try:
+                            body = my_msg.get_payload(decode=True).decode('utf-8')
+                        except UnicodeDecodeError:
+                            body = my_msg.get_payload(decode=True).decode('latin-1', 'replace')
+                        
+                        soup = BeautifulSoup(body, 'html.parser')
+
+                        #Clean HTML for NLP purposes and assign to reply_thread
+                        cleaned_text = soup.get_text(separator=' ', strip=True)
                         email_dict['first_message'] = cleaned_text
+
+                        uuid_input = soup.find_all('input', {'id': lambda x: x and 'hidden-uuid' in x})
+
+                        # Check if any UUID input is found
+                        if uuid_input:
+                            uuid = uuid_input[0]['value']
+                            email_dict['recipient_id'] = uuid
+                        else:
+                            pass
+                            #no uuid
 
                     #append email_dict at the end no matter what
                     email_data.append(email_dict)
 
-        df = pd.DataFrame(email_data)
+        # df = pd.DataFrame(email_data)
 
-        return(df)
+        # return(df)
         
+        return(email_data)
+
     def cleanse_frame(df, inbox_or_outbox):
             
         try:
             #change date to datetime, in order to create unique _id reference of when the email occured
             df['date'] = pd.to_datetime(df['date'], errors='coerce', utc=True)
             df['date'] = df['date'].apply(lambda x: x.isoformat())
-                  
+            
+
+            #create a new column that shows 1 if the message is a reply
+            # df['reply'] = np.where(df['subject'].str.contains('RE:', case=False, regex=True), 'Y', 'N')
             # Create a new column that shows 'Y' if the message is a reply, 'N' otherwise
-            # df['reply'] = df['subject'].apply(lambda x: 'Y' if 'RE:' in x.upper() else 'N')
-            df['reply'] = np.where(~df['references'].isna(), 'Y', 'N')
+            df['reply'] = df['subject'].apply(lambda x: 'Y' if 'RE:' in x.upper() else 'N')
 
 
             #Remove 'RE:' from the 'subject' column in order to merge on subject line
@@ -236,9 +249,9 @@ class scrape:
 
     def piece_together(outbox, inbox):
 
-        box = pd.merge(inbox, outbox, left_on = 'references', right_on='message_id', how = 'right', suffixes=('_inbox', '_outbox'))
+        box = pd.merge(outbox, inbox, on = 'recipient_id', how = 'left', suffixes=('_outbox', '_inbox'))
 
-        box = box[['message_id_outbox', 'references_inbox', 'in_reply_to_inbox', 'subject_outbox', 'from_outbox', 'to_outbox',
+        box = box[['recipient_id', 'subject_outbox', 'from_outbox', 'to_outbox',
             'date_outbox', 'first_message_outbox', 'reply_inbox', 'reply_thread_inbox']]
 
         box = box.rename(columns = {'subject_outbox': 'subject', 'from_outbox': 'from', 'to_outbox': 'to',
@@ -264,7 +277,7 @@ class scrape:
         thread.loc[(thread['sentiment'] == 0) & (thread['reply'] == 'N'), 'sentiment_category'] = None
 
         #drop everything that does not have a recipient_id
-        thread = thread[~thread['references_inbox'].isna()]
+        thread = thread[thread['recipient_id'] != '']
 
         return(thread)
     
