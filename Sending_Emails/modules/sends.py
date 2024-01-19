@@ -16,6 +16,8 @@ class SendMail:
         msg['From'] = EMAIL_ADDRESS_FROM
         msg['To'] = email
 
+        print(school, sport)
+
         # Read the PNG file as binary data and encode it as base64
         # png_file_path = f'PNGs/{png_path}.png'
         # try:
@@ -25,7 +27,7 @@ class SendMail:
         # except FileNotFoundError:
         #     image_base64 = ''
             
-        body = get_intro_template(school, sport)
+        body = get_intro_template()
 
         # Set the content as HTML
         msg.set_content(body, subtype='html')
@@ -43,6 +45,7 @@ class SendMail:
 
     def get_next_50(email_history=None):
 
+        #get unique emails
         df = pd.read_csv(r'C:\Users\samuel.taylor\OneDrive - Green Dot Public Schools\Desktop\Git_Directory\CP\CustomPlanet_Work\Email_Scraper\SQL_Scripts\email_prospects_csvs\baseball.csv')
         df = df.drop_duplicates(subset='email')
         df = df.reset_index(drop = True)

@@ -23,25 +23,25 @@ def process(subject_line, email_address, email_pass, start_date):
     email_address = 'team@customplanet.com'
     email_pass = imap_password_customplanet
  
-    msgs_inbox = scrape.scrape_msgs_outbox_or_inbox('inbox', subject_line, email_address, email_pass, start_date)
-    inbox = scrape.create_msg_frame(msgs_inbox)
-    inbox = scrape.cleanse_frame(inbox, 'inbox')
-    inbox.name = 'inbox'
+    # msgs_inbox = scrape.scrape_msgs_outbox_or_inbox('inbox', subject_line, email_address, email_pass, start_date)
+    # inbox = scrape.create_msg_frame(msgs_inbox)
+    # inbox = scrape.cleanse_frame(inbox, 'inbox')
+    # inbox.name = 'inbox'
 
     msgs_outbox = scrape.scrape_msgs_outbox_or_inbox('outbox', subject_line, email_address, email_pass, start_date)
     outbox = scrape.create_msg_frame(msgs_outbox)
     outbox = scrape.cleanse_frame(outbox, 'outbox')
     outbox.name = 'outbox'
     
-    if inbox.empty == True:
-        thread = pd.DataFrame()
-        pass
-    else: #this is a left merge on outbox
-        thread = scrape.piece_together(outbox, inbox)
-        thread = scrape.assign_sentiment(thread)
+    # if inbox.empty == True:
+    #     thread = pd.DataFrame()
+    #     pass
+    # else: #this is a left merge on outbox
+    #     thread = scrape.piece_together(outbox, inbox)
+    #     thread = scrape.assign_sentiment(thread)
     
-    # #If message was accidentally triggered more than once
-    thread = thread.drop_duplicates(subset = ['subject', 'to'], keep='last')
+    # # #If message was accidentally triggered more than once
+    # thread = thread.drop_duplicates(subset = ['subject', 'to'], keep='last')
     
     # # Specify your database connection details
     # server = 'emailcampaign.c9vhoi6ncot7.us-east-1.rds.amazonaws.com'

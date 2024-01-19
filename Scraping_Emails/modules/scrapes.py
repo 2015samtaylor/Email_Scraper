@@ -52,11 +52,11 @@ class scrape:
             #limit to 100 for testing
             # email_ids = email_ids[:100]
             if email_ids:
-                print(f"You have {len(email_ids)} email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
-                logging.info(f"You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox}")
+                print(f"You have {len(email_ids)} email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
+                logging.info(f"You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
             else:
-                print(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox}")
-                logging.info(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox}")
+                print(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
+                logging.info(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
 
         # ---------------------------iterate through email_ids, get the whole message and append the data to msgs list.
 
@@ -207,6 +207,9 @@ class scrape:
             try:
                 #make the body column a list
                 df['body'] = df['body'].apply(lambda x: [x] if isinstance(x, str) else x)
+
+                df = df[['message_id', 'subject', 'from', 'to', 'date', 'first_message', 'email_campaign_tag', 'sport']]
+                df['date'] = pd.to_datetime(df['date'])
                 
             
             except KeyError:

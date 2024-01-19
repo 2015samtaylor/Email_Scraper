@@ -1,4 +1,4 @@
-def get_intro_template(school, unique_identifier, sport):
+def get_intro_template():
     return f'''
     <!DOCTYPE html>
     <html>
@@ -77,8 +77,6 @@ def get_intro_template(school, unique_identifier, sport):
             <p>Hurry, because the Offical MLB jerseys sell out every year!</p>
             <p>Visit our website <a href="https://customplanet.com/Majestic-Jerseys.aspx">www.customplanet.com</a> or give us a call/text at <a href="(801) 810-8337" class="underline"> (801) 810-8337</a></p>
 
-
-            <input type="hidden" id="hidden-uuid" value="{unique_identifier}">
 
             <div class="image-container">
                 <a href="https://www.customplanet.com/" target="_blank">
