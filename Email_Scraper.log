@@ -362,3 +362,139 @@ New logging instance
 New logging instance
 18-Jan-24 20:41:03 - You have email responses to the specified search criteria Official in the inbox
 18-Jan-24 20:41:06 - You have email responses to the specified search criteria Official in the outbox
+01-Feb-24 19:52:01 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 01/31/2024
+01-Feb-24 19:52:03 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 01/31/2024
+01-Feb-24 19:52:03 - 
+
+New logging instance
+01-Feb-24 19:52:04 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+01-Feb-24 19:52:07 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+05-Feb-24 16:22:37 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/04/2024
+05-Feb-24 16:22:38 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/04/2024
+05-Feb-24 16:22:38 - 
+
+New logging instance
+05-Feb-24 16:22:39 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+05-Feb-24 16:22:42 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+05-Feb-24 16:37:58 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/04/2024
+05-Feb-24 16:37:59 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/04/2024
+05-Feb-24 16:37:59 - 
+
+New logging instance
+05-Feb-24 16:38:01 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+05-Feb-24 16:38:06 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+05-Feb-24 16:53:54 - No new sent emails to append to email_history
+05-Feb-24 16:54:07 - No new sent emails to append to email_history
+05-Feb-24 16:58:27 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/04/2024
+05-Feb-24 16:58:28 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/04/2024
+05-Feb-24 16:58:28 - 
+
+New logging instance
+05-Feb-24 16:58:29 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+05-Feb-24 16:59:27 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+05-Feb-24 17:07:53 - No new sent emails to append to email_history
+05-Feb-24 17:08:33 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/04/2024
+05-Feb-24 17:08:34 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/04/2024
+05-Feb-24 17:08:34 - 
+
+New logging instance
+05-Feb-24 17:08:35 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+05-Feb-24 17:08:38 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+05-Feb-24 17:11:23 - No new sent emails to append to email_history
+05-Feb-24 17:12:10 - No new sent emails to append to email_history
+05-Feb-24 17:12:10 - New records inserted - 3
+05-Feb-24 17:12:10 - 0 threads have been updated
+05-Feb-24 17:24:25 - No new sent emails to append to email_history
+05-Feb-24 17:24:25 - New records inserted - 3
+05-Feb-24 17:25:42 - No new sent emails to append to email_history
+05-Feb-24 17:25:42 - New records inserted - 3
+05-Feb-24 17:40:43 - No new sent emails to append to email_history
+05-Feb-24 17:46:47 - No new sent emails to append to email_history
+06-Feb-24 22:14:04 - 
+
+New logging instance
+06-Feb-24 22:14:05 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 22:14:06 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 22:14:06 - No bad emails to update
+06-Feb-24 22:14:07 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 22:14:11 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 22:50:25 - 
+
+New logging instance
+06-Feb-24 22:50:26 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 22:50:27 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 22:50:27 - No bad emails to update
+06-Feb-24 22:50:28 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 22:50:31 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 23:12:37 - 
+
+New logging instance
+06-Feb-24 23:12:38 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 23:12:39 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 23:12:39 - No bad emails to update
+06-Feb-24 23:12:40 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 23:12:42 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 23:19:07 - NumExpr defaulting to 8 threads.
+06-Feb-24 23:19:08 - 
+
+New logging instance
+06-Feb-24 23:19:09 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 23:19:10 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 23:19:10 - No bad emails to update
+06-Feb-24 23:19:11 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 23:19:14 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 23:25:06 - NumExpr defaulting to 8 threads.
+06-Feb-24 23:25:08 - 
+
+New logging instance
+06-Feb-24 23:25:09 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 23:25:10 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 23:25:10 - No bad emails to update
+06-Feb-24 23:25:12 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 23:25:28 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 23:28:27 - NumExpr defaulting to 8 threads.
+06-Feb-24 23:28:30 - 
+
+New logging instance
+06-Feb-24 23:28:31 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 23:28:32 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 23:28:32 - No bad emails to update
+06-Feb-24 23:28:33 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 23:28:46 - NumExpr defaulting to 8 threads.
+06-Feb-24 23:28:49 - 
+
+New logging instance
+06-Feb-24 23:28:50 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 23:28:51 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 23:28:51 - No bad emails to update
+06-Feb-24 23:28:52 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 23:28:54 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 23:36:39 - NumExpr defaulting to 8 threads.
+06-Feb-24 23:36:42 - 
+
+New logging instance
+06-Feb-24 23:36:43 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 23:36:44 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 23:36:44 - No bad emails to update
+06-Feb-24 23:36:45 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 23:36:47 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 23:40:19 - email_history is empty
+06-Feb-24 23:41:57 - NumExpr defaulting to 8 threads.
+06-Feb-24 23:42:00 - 
+
+New logging instance
+06-Feb-24 23:42:01 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 23:42:02 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 23:42:02 - No bad emails to update
+06-Feb-24 23:42:03 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 23:42:06 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 23:46:40 - email_history is empty sending over all rows
+06-Feb-24 23:47:59 - 
+
+New logging instance
+06-Feb-24 23:48:00 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/05/2024
+06-Feb-24 23:48:01 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/05/2024
+06-Feb-24 23:48:01 - No bad emails to update
+06-Feb-24 23:48:02 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+06-Feb-24 23:48:04 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+06-Feb-24 23:50:47 - email_history is empty sending over all rows

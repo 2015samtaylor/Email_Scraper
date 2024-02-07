@@ -6,6 +6,8 @@ from sqlalchemy import update
 import urllib
 import logging
 
+
+
 class DatabaseConnector:
 
     def __init__(self, server, database, username, password, sql_db, sql_table):
@@ -80,27 +82,50 @@ class DatabaseConnector:
 
 
 
-    def send(self, frame, update_column=None):
+    def send(self, frame, table_name, update_column=None):
         engine = self.generate_sql_engine()
         dtypes = self.get_dtypes(self.sql_db, self.sql_table)
 
+        #This is present in order to update the reply_thread updates in thread table
         if update_column:
             # Update only the specified column
             self.update_column(engine, frame, update_column)
             
         else:
-            # Create or replace the table with the correct data types
-            frame.to_sql(self.sql_table, con=engine, index=False, dtype=dtypes, if_exists='append')
 
+            distinct_ids = self.SQL_query(f'SELECT DISTINCT message_id FROM [emailcampaign].[dbo].[{table_name}]')
+
+            if distinct_ids.empty:
+                logging.info(f'{table_name} is empty sending over all rows')
+                print(f'{table_name} is empty sending over all rows')
+                frame.to_sql(self.sql_table, con=engine, index=False, dtype=dtypes, if_exists='append')
+
+            else:
+
+                #If rows exist in the DB, check to see what isnew
+                new_rows = pd.merge(frame, distinct_ids, on = 'message_id', indicator=True)
+                new_rows = new_rows.loc[new_rows['_merge'] == 'left_only']
+
+                if not new_rows.empty:
+                    logging.info(f'{len(new_rows)} new emails appended to email_history')
+                    print(f'{len(new_rows)} new emails appended to email_history')
+                    new_rows.to_sql(self.sql_table, con=engine, index=False, dtype=dtypes, if_exists='append')
+                else:
+                    logging.info('No new sent emails to append to email_history')
+                    print('No new sent emails to append to email_history')
+            
+                
+        
 
     def append_new_records(self, thread):
-        # There are all the ids that can be maintained from the scrape because an email was sent out. (existing message_id_outbox)
-        distinct_ids_email_history = self.SQL_query('Select distinct message_id_outbox FROM [emailcampaign].[dbo].[email_history]')
+        # All existing message IDS that have been sent out
+        distinct_ids_email_history = self.SQL_query('Select distinct message_id FROM [emailcampaign].[dbo].[email_history]')
 
-        # Narrow down records to match email send history on message_id_outbox
-        new_updates = pd.merge(thread, distinct_ids_email_history, on='message_id_outbox')
+        #Find new records to add to the thread table
+        new_updates = pd.merge(thread, distinct_ids_email_history, on = 'message_id')
+
         # Narrow down further to only new records and then append.
-        existing_ids_thread = self.SQL_query('Select distinct message_id_outbox FROM [emailcampaign].[dbo].[thread]')
+        existing_ids_thread = self.SQL_query('Select distinct message_id FROM [emailcampaign].[dbo].[thread]')
 
         # Filter down to only get new_updates, then call on send method
         new_updates = pd.merge(new_updates, existing_ids_thread, on='message_id_outbox', how='outer', indicator=True)

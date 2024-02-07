@@ -181,7 +181,7 @@ class scrape:
         try:
             #change date to datetime, in order to create unique _id reference of when the email occured
             df['date'] = pd.to_datetime(df['date'], errors='coerce', utc=True)
-            df['date'] = df['date'].apply(lambda x: x.isoformat())
+            # df['date'] = df['date'].apply(lambda x: x.isoformat())
                   
             # Create a new column that shows 'Y' if the message is a reply, 'N' otherwise
             # df['reply'] = df['subject'].apply(lambda x: 'Y' if 'RE:' in x.upper() else 'N')
@@ -209,8 +209,7 @@ class scrape:
                 df['body'] = df['body'].apply(lambda x: [x] if isinstance(x, str) else x)
 
                 df = df[['message_id', 'subject', 'from', 'to', 'date', 'first_message', 'email_campaign_tag', 'sport']]
-                df['date'] = pd.to_datetime(df['date'])
-                
+                df['date'] = pd.to_datetime(df['date'])        
             
             except KeyError:
                 pass
