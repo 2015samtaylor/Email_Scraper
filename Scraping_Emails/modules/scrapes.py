@@ -184,7 +184,6 @@ class scrape:
             # df['date'] = df['date'].apply(lambda x: x.isoformat())
                   
             # Create a new column that shows 'Y' if the message is a reply, 'N' otherwise
-            # df['reply'] = df['subject'].apply(lambda x: 'Y' if 'RE:' in x.upper() else 'N')
             df['reply'] = np.where(~df['references'].isna(), 'Y', 'N')
 
 
@@ -243,7 +242,7 @@ class scrape:
         box = box[['message_id_outbox', 'references_inbox', 'in_reply_to_inbox', 'subject_outbox', 'from_outbox', 'to_outbox',
             'date_outbox', 'first_message_outbox', 'reply_inbox', 'reply_thread_inbox']]
 
-        box = box.rename(columns = {'subject_outbox': 'subject', 'from_outbox': 'from', 'to_outbox': 'to',
+        box = box.rename(columns = {'subject_outbox': 'subject', 'from_outbox': 'from', 'to_outbox': 'to', 'message_id_outbox': 'message_id',
             'date_outbox': 'date', 'first_message_outbox': 'first_message', 'reply_inbox': 'reply', 'reply_thread_inbox': 'reply_thread'})
 
         box['reply'] = box['reply'].fillna('N')
@@ -306,5 +305,12 @@ class scrape:
 
         return(text)
     
+
+    def map_reply_outbox(thread, outbox):
+        temp = thread[['message_id']]
+        temp['reply'] = 'Y'
+        reply_dict = temp.set_index('message_id')['reply'].to_dict()
+        outbox['reply'] = outbox['message_id'].map(reply_dict).fillna('N')
+        return(outbox)
 
 

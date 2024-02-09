@@ -73,7 +73,7 @@ class DatabaseConnector:
                 # Build an update query
                 update_stmt = (
                     update(table)
-                    .where(table.c['message_id_outbox'] == row['message_id_outbox'])
+                    .where(table.c['message_id'] == row['message_id'])
                     .values({update_column: row[update_column]})
                 )
 
@@ -115,53 +115,29 @@ class DatabaseConnector:
                     print('No new sent emails to append to email_history')
             
                 
-        
-
-    def append_new_records(self, thread):
-        # All existing message IDS that have been sent out
-        distinct_ids_email_history = self.SQL_query('Select distinct message_id FROM [emailcampaign].[dbo].[email_history]')
-
-        #Find new records to add to the thread table
-        new_updates = pd.merge(thread, distinct_ids_email_history, on = 'message_id')
-
-        # Narrow down further to only new records and then append.
-        existing_ids_thread = self.SQL_query('Select distinct message_id FROM [emailcampaign].[dbo].[thread]')
-
-        # Filter down to only get new_updates, then call on send method
-        new_updates = pd.merge(new_updates, existing_ids_thread, on='message_id_outbox', how='outer', indicator=True)
-        new_updates = new_updates.loc[new_updates['_merge'] == 'left_only']
-        new_updates = new_updates.drop(columns=['_merge'])
-
-        if not new_updates.empty:
-            self.send(new_updates, update_column=None)
-            print(f'New records inserted - {len(new_updates)}')
-            logging.info(f'New records inserted - {len(new_updates)}')
-        else:
-            print('No new records to send')
-            logging.info('No new records to send')
-        
-        return(new_updates)
-
+    
     def update_reply_thread(self, thread):
 
         # Retrieve existing recipient_ids from the 'thread' table
-        existing_ids_thread = self.SQL_query(f'SELECT DISTINCT message_id_outbox FROM {self.sql_db}.dbo.{self.sql_table}')
+        existing_ids_thread = self.SQL_query(f'SELECT DISTINCT message_id FROM {self.sql_db}.dbo.{self.sql_table}')
 
         # Merge the 'thread' table with the provided 'thread' DataFrame
-        pre_existing_thread_updates = pd.merge(thread, existing_ids_thread, on='message_id_outbox')
+        pre_existing_thread_updates = pd.merge(thread, existing_ids_thread, on='message_id')
 
         # Filter rows where 'reply_thread' is not empty
         pre_existing_thread_updates = pre_existing_thread_updates[pre_existing_thread_updates['reply_thread'] != '']
 
-        print(f'{len(pre_existing_thread_updates)} threads have been updated')
-        logging.info(f'{len(pre_existing_thread_updates)} threads have been updated')
+   
 
         # Check if there are pre-existing threads to update, and if they are not empty
         if pre_existing_thread_updates.empty == True:
             print('No pre-existing threads to update')
+            logging.info('No pre-existing threads to update')
         else:
+            print(f'{len(pre_existing_thread_updates)} threads have been updated')
+            logging.info(f'{len(pre_existing_thread_updates)} threads have been updated')
             # Use the send method to update the 'reply_thread' column
-            self.send(pre_existing_thread_updates, update_column='reply_thread')
+            self.send(pre_existing_thread_updates, 'thread', update_column='reply_thread')
 
 
 

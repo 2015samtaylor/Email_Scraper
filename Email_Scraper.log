@@ -498,3 +498,59 @@ New logging instance
 06-Feb-24 23:48:02 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
 06-Feb-24 23:48:04 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
 06-Feb-24 23:50:47 - email_history is empty sending over all rows
+07-Feb-24 15:34:28 - NumExpr defaulting to 8 threads.
+07-Feb-24 15:34:31 - 
+
+New logging instance
+07-Feb-24 15:34:33 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/06/2024
+07-Feb-24 15:34:34 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/06/2024
+07-Feb-24 15:34:34 - No bad emails to update
+07-Feb-24 15:34:36 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+07-Feb-24 15:34:39 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+07-Feb-24 15:37:52 - email_history is empty sending over all rows
+07-Feb-24 15:41:42 - No new sent emails to append to email_history
+07-Feb-24 15:49:40 - 
+
+New logging instance
+07-Feb-24 15:49:42 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/06/2024
+07-Feb-24 15:49:43 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/06/2024
+07-Feb-24 15:49:43 - No bad emails to update
+07-Feb-24 15:49:44 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+07-Feb-24 15:49:47 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+07-Feb-24 16:01:27 - 
+
+New logging instance
+07-Feb-24 16:01:28 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/06/2024
+07-Feb-24 16:01:29 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/06/2024
+07-Feb-24 16:01:29 - No bad emails to update
+07-Feb-24 16:01:30 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+07-Feb-24 16:01:33 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+08-Feb-24 15:51:48 - NumExpr defaulting to 8 threads.
+08-Feb-24 15:51:52 - 
+
+New logging instance
+08-Feb-24 15:51:53 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/07/2024
+08-Feb-24 15:51:55 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/07/2024
+08-Feb-24 15:51:55 - No bad emails to update
+08-Feb-24 15:51:56 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+08-Feb-24 15:51:59 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+08-Feb-24 15:56:09 - No new sent emails to append to email_history
+08-Feb-24 15:56:57 - thread is empty sending over all rows
+08-Feb-24 16:00:21 - thread is empty sending over all rows
+08-Feb-24 16:02:02 - No new sent emails to append to email_history
+08-Feb-24 16:02:02 - No new sent emails to append to email_history
+08-Feb-24 16:22:16 - NumExpr defaulting to 8 threads.
+08-Feb-24 16:22:17 - 
+
+New logging instance
+08-Feb-24 16:22:18 - There are no responses to the specified emails search criteria Official in the outbox with a filter date of 02/07/2024
+08-Feb-24 16:22:19 - There are no responses to the specified emails search criteria Delivery Status Notification in the inbox with a filter date of 02/07/2024
+08-Feb-24 16:22:19 - No bad emails to update
+08-Feb-24 16:22:20 - You have email responses to the specified search criteria Official in the inbox with a filter date of 11/15/2023
+08-Feb-24 16:22:23 - You have email responses to the specified search criteria Official in the outbox with a filter date of 11/15/2023
+08-Feb-24 16:25:04 - No new sent emails to append to email_history
+08-Feb-24 16:25:04 - No new sent emails to append to email_history
+08-Feb-24 16:25:05 - 3 threads have been updated
+08-Feb-24 16:26:28 - 3 threads have been updated
+08-Feb-24 16:27:03 - 3 threads have been updated
+08-Feb-24 16:27:17 - 3 threads have been updated
