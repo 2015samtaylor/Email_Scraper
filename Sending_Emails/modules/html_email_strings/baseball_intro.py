@@ -102,7 +102,7 @@ def get_intro_template():
             
             <div class="image-container" style="margin-top: 30px;">
                 <a href="https://customplanet.com/Majestic-Jerseys.aspx"> 
-                    <img src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYSC8neSpHDVZ85b0HNeRJGBPIzhCrSENTUy4I552Rhz1OrdKTQXSFBFhb0JlBgQxww1Yd-ydVUkKmAygDhhEfi-cT0NIQ=s1600" alt="Majestic Gear" width="600px"> 
+                    <img src="https://i.imgur.com/HvkaGes.png" alt="Majestic Gear" width="600px"> 
                 </a>
             </div>
 

@@ -1,8 +1,8 @@
 import pandas as pd
 from config import imap_password_customplanet, db_username, db_password
 from Scraping_Emails.modules.scrapes import scrape
-from Scraping_Emails.modules.db_operations import DatabaseConnector
-from SQL_Scripts.email_failures import *
+from Scraping_Emails.modules.db_operations_aws import DatabaseConnector
+from SQL_Scripts.modules.email_failures import *
 from datetime import datetime, timedelta
 
 # ----------------------------------Updating Faulty Emails in the DB before Send----------------------------------

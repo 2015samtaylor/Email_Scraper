@@ -13,7 +13,7 @@ import numpy as np
 
 class scrape:
 
-    def scrape_msgs_outbox_or_inbox(inbox_or_outbox, subject_line, email_address, email_pass, start_date):
+    def scrape_msgs_outbox_or_inbox(inbox_or_outbox, subject_line, email_address, email_pass, start_date, log_type):
 
         # Convert start_date to IMAP date format
         start_date_formatted = datetime.strptime(start_date, '%m/%d/%Y').strftime('%d-%b-%Y')
@@ -52,11 +52,11 @@ class scrape:
             #limit to 100 for testing
             # email_ids = email_ids[:100]
             if email_ids:
-                print(f"You have {len(email_ids)} email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
-                logging.info(f"You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
+                print(f"{log_type} You have {len(email_ids)} email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
+                logging.info(f"{log_type} You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
             else:
-                print(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
-                logging.info(f"There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
+                print(f"{log_type} There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
+                logging.info(f"{log_type} There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
 
         # ---------------------------iterate through email_ids, get the whole message and append the data to msgs list.
 
@@ -208,7 +208,8 @@ class scrape:
                 df['body'] = df['body'].apply(lambda x: [x] if isinstance(x, str) else x)
 
                 df = df[['message_id', 'subject', 'from', 'to', 'date', 'first_message', 'email_campaign_tag', 'sport']]
-                df['date'] = pd.to_datetime(df['date'])        
+                # df['date'] = pd.to_datetime(df['date'])        
+                df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
             
             except KeyError:
                 pass
@@ -307,10 +308,17 @@ class scrape:
     
 
     def map_reply_outbox(thread, outbox):
-        temp = thread[['message_id']]
-        temp['reply'] = 'Y'
-        reply_dict = temp.set_index('message_id')['reply'].to_dict()
-        outbox['reply'] = outbox['message_id'].map(reply_dict).fillna('N')
+        try:
+            if not thread.empty:
+                reply_dict = thread.set_index('message_id')['reply'].to_dict()
+                outbox['reply'] = outbox['message_id'].map(reply_dict).fillna('N')
+            else:
+                logging.info('Thread dataframe is empty')
+        except Exception as e:
+            logging.error(f'Error in map_reply_outbox: {e}')
+
         return(outbox)
+
+       
 
 

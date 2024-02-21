@@ -4,7 +4,8 @@ from email.message import EmailMessage
 # import base64
 import pandas as pd
 import os
-from modules.html_email_strings.baseball_intro import get_intro_template
+from Sending_Emails.modules.html_email_strings.baseball_intro import get_intro_template   #Dictates what template is being passed in into the body variable
+
 
 
 class SendMail:
@@ -15,8 +16,6 @@ class SendMail:
         msg['Subject'] = global_subject_line.format(sport, school)
         msg['From'] = EMAIL_ADDRESS_FROM
         msg['To'] = email
-
-        print(school, sport)
 
         # Read the PNG file as binary data and encode it as base64
         # png_file_path = f'PNGs/{png_path}.png'
@@ -43,12 +42,10 @@ class SendMail:
             print(f"Recipient error for {email}: {e}")
         
 
-    def get_next_50(email_history=None):
+    def get_next_50(df, email_history=None):
 
-        #get unique emails
-        df = pd.read_csv(r'C:\Users\samuel.taylor\OneDrive - Green Dot Public Schools\Desktop\Git_Directory\CP\CustomPlanet_Work\Email_Scraper\SQL_Scripts\email_prospects_csvs\baseball.csv')
-        df = df.drop_duplicates(subset='email')
-        df = df.reset_index(drop = True)
+        #df is passed in to get unique emails
+       
 
         #this means email_history is undeclared as a variable, the process broke. Start by reading in the csv   
         if email_history is None:
