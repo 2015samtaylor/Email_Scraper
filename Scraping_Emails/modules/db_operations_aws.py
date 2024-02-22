@@ -102,17 +102,24 @@ class DatabaseConnector:
 
             else:
 
-                #If rows exist in the DB, check to see what isnew
-                new_rows = pd.merge(frame, distinct_ids, on = 'message_id', indicator=True)
+                #If rows exist in the DB, check to see what is new
+                #For the new messages there are no message_ids to merge on. 
+
+
+
+                new_rows = pd.merge(frame, distinct_ids, on = 'message_id', how='outer', indicator=True)
                 new_rows = new_rows.loc[new_rows['_merge'] == 'left_only']
+                new_rows = new_rows.drop('_merge', axis=1)
+
 
                 if not new_rows.empty:
+                    new_rows.to_sql(self.sql_table, con=engine, index=False, dtype=dtypes, if_exists='append')
                     logging.info(f'{len(new_rows)} new emails appended to email_history')
                     print(f'{len(new_rows)} new emails appended to email_history')
-                    new_rows.to_sql(self.sql_table, con=engine, index=False, dtype=dtypes, if_exists='append')
+                    
                 else:
-                    logging.info('No new sent emails to append to email_history')
-                    print('No new sent emails to append to email_history')
+                    logging.info('No new sent emails to append to email_history. Frame is empty after merge.')
+                    print('No new sent emails to append to email_history. Frame is empty after merge')
             
                 
     

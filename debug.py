@@ -1,45 +1,27 @@
+#2000 emails sent to email_history took 5 minutes
+import logging
+import warnings
+import os
+
+# Mute pandas UserWarning
+warnings.filterwarnings("ignore", category=UserWarning, module="pandas")
+
+#create log dir and file
+logpath_creation = os.getcwd() + '\\Logs'
+if not os.path.exists(logpath_creation):
+    os.makedirs(logpath_creation)
+
+logging.basicConfig(filename= logpath_creation + '\\Email_Scraper.log', level=logging.INFO,
+                    format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S', force=True)
+
+
 import pandas as pd
 from config import imap_password_customplanet, db_username, db_password
 from Scraping_Emails.modules.scrapes import scrape
 from Scraping_Emails.modules.db_operations_aws import DatabaseConnector
-from SQL_Scripts.modules.email_failures import *
-from datetime import datetime, timedelta
 
-# ----------------------------------Updating Faulty Emails in the DB before Send----------------------------------
-#Searches GMAIL on the daily for bad emails that were sent back, and sends data to unsubscribed email table
-
-def gather_and_send_bad_emails_to_db(subject_line, email_address, email_pass):
-
-    #First thing to occur everytime
-    logging.info('\n\nNew logging instance')
-
-    current_date = datetime.now()
-    previous_date = current_date - timedelta(days=1)
-    # formatted_date = previous_date.strftime('%m/%d/%Y')
-    formatted_date = '11/01/2023'
-    #The reason the date is up today is because the faulty emails from the past are already in the DB
-
-
-    #Get all outbox emails based on subject line and start date
-    msgs_outbox = scrape.scrape_msgs_outbox_or_inbox('outbox', subject_line, email_address, email_pass, formatted_date)
-    outbox = scrape.create_msg_frame(msgs_outbox)
-    outbox = scrape.cleanse_frame(outbox, 'outbox')
-
-    # Find emails with delivery status notification flags, link those to what was sent, and write those emails to the CP db
-    failures = scrape.scrape_msgs_outbox_or_inbox('inbox', 'Delivery Status Notification', email_address, email_pass, formatted_date)
-    failures = scrape.create_msg_frame(failures)
-
-    failures = find_bad_emails(outbox, failures, subject_line)
-    
-    #failures will return as None if except block is hit
-    if failures is not None:
-        print(len(failures))
-        #the merge is returning nothing here causing update to occur anyways. Debug this portion and figure out the logic
-        update_bad_emails(failures)
-    
-    else:
-        print('No emails to update')
-        logging.info('No bad emails to update')
+#What is the difference between update_bad_emails & gather and send bad emails to db
+#Consolidating update_bad_emails to email_faulures
 
 
 email_address = 'team@customplanet.com'
@@ -48,11 +30,60 @@ server = 'emailcampaign.c9vhoi6ncot7.us-east-1.rds.amazonaws.com'
 database = 'emailcampaign'
 db = 'emailcampaign'
 
+# ------------------------------------packaging process into final function----------------------------------------
+
+def process(subject_line, email_address, email_pass, start_date):
+
+    #create the msgs via scrape, then iterate through list of messages, and lastly cleanse frame
+    email_address = 'team@customplanet.com'
+    email_pass = imap_password_customplanet
+
+    #First thing to occur everytime
+    logging.info('\n\nNew logging instance')
+ 
+    msgs_inbox = scrape.scrape_msgs_outbox_or_inbox('inbox', subject_line, email_address, email_pass, start_date, 'Current Subject Line')
+    inbox = scrape.create_msg_frame(msgs_inbox)
+    inbox = scrape.cleanse_frame(inbox, 'inbox')
+    inbox.name = 'inbox'
+
+    msgs_outbox = scrape.scrape_msgs_outbox_or_inbox('outbox', subject_line, email_address, email_pass, start_date, 'Current Subject Line')
+    outbox = scrape.create_msg_frame(msgs_outbox)
+    outbox = scrape.cleanse_frame(outbox, 'outbox')
+    outbox.name = 'outbox'
+        
+    if inbox.empty == True:
+        thread = pd.DataFrame()
+        pass
+    else: #this is a left merge on outbox
+        thread = scrape.piece_together(outbox, inbox)
+        thread = scrape.assign_sentiment(thread)
+       
+    # #If message was accidentally triggered more than once
+    thread = thread.drop_duplicates(subset = ['subject', 'to'], keep='last')
+    thread.reset_index(drop = True, inplace = True)
+    outbox = scrape.map_reply_outbox(thread, outbox)
+
+    return(inbox, outbox, thread)
+
+
+# -------------------------------------------
+
+#Get inbox, outbox, and create thread with given subject line back to given date
+subject_line = 'Official MLB Jerseys'
+inbox, outbox, thread= process(subject_line, email_address, email_pass, '02/01/2024')
+
+
+# Instantiate the DatabaseConnector class, send over all emails in outbox variable to email_history table that contain the subject line 
+#Optional column identifiers to add in to the DB
+outbox['email_campaign_tag'] = 'Majestic Round 2'
+outbox['sport'] = 'Baseball'    #frame   #table_name
 db_connector_email_history = DatabaseConnector(server, database, db_username, db_password, db, 'email_history')
-query = db_connector_email_history.SQL_query('SELECT DISTINCT subject FROM [emailcampaign].[dbo].[email_history]')
 
 
-#Iterate through all unique subject lines to update the db table with all faulty email addresses
-for line in query['subject']:
-    print(line)
-    gather_and_send_bad_emails_to_db(line, email_address, email_pass)
+
+if outbox.empty != True:
+    db_connector_email_history = DatabaseConnector(server, database, db_username, db_password, db, 'email_history')
+    db_connector_email_history.send(outbox, 'email_history')
+else:
+    logging.info('Outbox is an empty frame')
+    print('Outbox is an empty frame')

@@ -484,3 +484,68 @@ New logging instance
 21-Feb-24 16:57:54 - Thread dataframe is empty
 21-Feb-24 16:57:54 - No new sent emails to append to email_history
 21-Feb-24 16:57:54 - Thread is an empty frame
+22-Feb-24 09:26:27 - 
+
+New logging instance
+22-Feb-24 09:26:28 - Current Subject Line There are no responses to the specified emails search criteria Official MLB Jerseys in the inbox with a filter date of 02/01/2024
+22-Feb-24 09:26:29 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the outbox with a filter date of 02/01/2024
+22-Feb-24 09:26:30 - Thread dataframe is empty
+22-Feb-24 09:26:30 - No new sent emails to append to email_history
+22-Feb-24 09:26:30 - Thread is an empty frame
+22-Feb-24 09:38:37 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the outbox with a filter date of 02/01/2024
+22-Feb-24 10:01:06 - 
+
+New logging instance
+22-Feb-24 10:01:07 - Searching inbox
+22-Feb-24 10:01:07 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:01:07 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the inbox with a filter date of 02/01/2024
+22-Feb-24 10:01:12 - Searching outbox
+22-Feb-24 10:01:12 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:01:12 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the outbox with a filter date of 02/01/2024
+22-Feb-24 10:02:57 - No new sent emails to append to email_history
+22-Feb-24 10:02:58 - No new sent emails to append to email_history
+22-Feb-24 10:02:58 - No pre-existing threads to update
+22-Feb-24 10:05:44 - No new sent emails to append to email_history
+22-Feb-24 10:08:31 - NumExpr defaulting to 8 threads.
+22-Feb-24 10:08:33 - 
+
+New logging instance
+22-Feb-24 10:08:34 - Searching inbox
+22-Feb-24 10:08:34 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:08:35 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the inbox with a filter date of 02/01/2024
+22-Feb-24 10:08:37 - Searching outbox
+22-Feb-24 10:08:38 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:08:38 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the outbox with a filter date of 02/01/2024
+22-Feb-24 10:16:15 - NumExpr defaulting to 8 threads.
+22-Feb-24 10:16:18 - 
+
+New logging instance
+22-Feb-24 10:16:18 - Searching inbox
+22-Feb-24 10:16:19 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:16:19 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the inbox with a filter date of 02/01/2024
+22-Feb-24 10:16:21 - Searching outbox
+22-Feb-24 10:16:22 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:16:22 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the outbox with a filter date of 02/01/2024
+22-Feb-24 10:21:32 - 
+
+New logging instance
+22-Feb-24 10:21:33 - Searching inbox
+22-Feb-24 10:21:33 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:21:34 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the inbox with a filter date of 02/01/2024
+22-Feb-24 10:21:36 - Searching outbox
+22-Feb-24 10:21:36 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:21:36 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the outbox with a filter date of 02/01/2024
+22-Feb-24 10:24:28 - 1357 new emails appended to email_history
+22-Feb-24 10:24:29 - 4 new emails appended to email_history
+22-Feb-24 10:24:29 - 4 threads have been updated
+22-Feb-24 10:26:07 - NumExpr defaulting to 8 threads.
+22-Feb-24 10:26:10 - 
+
+New logging instance
+22-Feb-24 10:26:10 - Searching inbox
+22-Feb-24 10:26:11 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:26:11 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the inbox with a filter date of 02/01/2024
+22-Feb-24 10:26:14 - Searching outbox
+22-Feb-24 10:26:14 - SUBJECT "Official MLB Jerseys" SINCE 01-Feb-2024
+22-Feb-24 10:26:14 - Current Subject Line You have email responses to the specified search criteria Official MLB Jerseys in the outbox with a filter date of 02/01/2024
+22-Feb-24 10:28:15 - No new sent emails to append to email_history. Frame is empty after merge.

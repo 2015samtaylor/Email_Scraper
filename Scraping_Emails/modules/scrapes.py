@@ -17,7 +17,7 @@ class scrape:
 
         # Convert start_date to IMAP date format
         start_date_formatted = datetime.strptime(start_date, '%m/%d/%Y').strftime('%d-%b-%Y')
-        end_date_formatted = (datetime.now() - timedelta(days=0)).strftime('%d-%b-%Y')
+        # end_date_formatted = (datetime.now() - timedelta(days=0)).strftime('%d-%b-%Y')
 
         # IMAP server settings for Gmail
         imap_server = 'imap.gmail.com'
@@ -35,8 +35,10 @@ class scrape:
         
         if inbox_or_outbox == 'inbox':
             mailbox = 'INBOX'
+            logging.info('Searching inbox')
         elif inbox_or_outbox == 'outbox':
             mailbox = '"[Gmail]/Sent Mail"'
+            logging.info('Searching outbox')
         else:
             logging.info('Wrong string input for inbox or outbox')
             
@@ -44,7 +46,8 @@ class scrape:
 
         # # Search for emails with a specific subject or other criteria
          # Search for emails with a specific subject and within the date range
-        search_criteria = f'SUBJECT "{subject_line}" SINCE {start_date_formatted} BEFORE {end_date_formatted}'
+        search_criteria = f'SUBJECT "{subject_line}" SINCE {start_date_formatted}'
+        logging.info(search_criteria)
         status, response = imap.search(None, search_criteria)
 
         if status == 'OK':
