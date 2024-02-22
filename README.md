@@ -22,9 +22,3 @@ All new emails sent, received are accounted for in the MS-SQL db.
 
 Any emails sent out which get sent back due to a defective email are logged to the DB as unsubscribed. The process checks through all distinct subject lines in order to be up to date. 
 
-
-
-
-
-- 
-
