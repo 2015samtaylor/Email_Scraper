@@ -98,16 +98,20 @@ def update_bad_emails(df):
 # ----------------------------------Updating Faulty Emails in the DB before Send----------------------------------
 #Searches GMAIL on the daily for bad emails that were sent back, and sends data to unsubscribed email table
 
-def gather_and_send_bad_emails_to_db(subject_line, email_address, email_pass, log_type):
+def gather_and_send_bad_emails_to_db(subject_line, email_address, email_pass, log_type, override_date = None):
 
     #First thing to occur everytime
     logging.info('\n\nNew logging instance')
 
     current_date = datetime.now()
-    previous_date = current_date - timedelta(days=1)
+
+    if override_date:
+        previous_date = datetime.strptime(override_date, '%m/%d/%Y').date()
+    else:
+        previous_date = current_date - timedelta(days=1)
+
     formatted_date = previous_date.strftime('%m/%d/%Y')
     #The reason the date is up today is because the faulty emails from the past are already in the DB
-
 
     #Get all outbox emails based on subject line and start date
     msgs_outbox = scrape.scrape_msgs_outbox_or_inbox('outbox', subject_line, email_address, email_pass, formatted_date, log_type)
