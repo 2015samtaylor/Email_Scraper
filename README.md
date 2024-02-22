@@ -1,56 +1,28 @@
-# Email Scraper and DB Update (MS-SQL)
+# Automated Email Campaign
 
-This Python codebase is broken up into 3 parts, Scraping Emails, Sending Emails, and MS-SQL Diagram/Blueprints
+This Python codebase is broken up into 3 parts, Scraping Emails, Sending Emails, and MS-SQL/MySQL operations, Diagram/Blueprints.
+The contacts are retrieved from an existing MySQL db, and the email data is sent to a MS-SQL db hosted in AWS. 
 
-**Sending Emails Documentation**
+**Sending Emails Overview**
 
-This script automates the process of sending personalized emails to a list of contacts for an email campaign. Here's a concise overview:
-
-1. **Imports:**
-   - Essential libraries and modules are imported, including `pandas` for data handling, `numpy` for numerical operations, and custom modules for database operations and email sending.
-
-2. **Data Preparation:**
-   - Reads a CSV file containing information about schools, contacts, and email paths.
-   - Temporarily modifies email addresses for testing purposes.
-
-3. **Email Sending Process:**
-   - Iterates through the rows of the dataset.
-   - Creates a unique identifier for each email using the UUID library.
-   - Checks if an email address has already been processed to avoid duplication.
-   - Gathers data for database storage and sends personalized emails using the `send_mail` function.
-   - Generates a DataFrame with campaign details to create an initial baseline, and record what emails have been sent to who
-
-4. **Database Connection:**
-   - Specifies the database connection details for the SQL database.
-
-5. **Database Interaction:**
-   - Creates a `DatabaseConnector` instance with the specified connection details.
-   - Sends the email campaign data to the 'email_history' table using the `send` method.
-
-This script streamlines the process of conducting email campaigns, facilitating efficient tracking and management of sent emails in a SQL database.
+This script automates the process of sending customized HTML emails. Once the email contacts are available they are passed through a loop which utilizes an SMTP connection, and passes in the template for each email.
+There is an available option within all emails to opt out of future email campaigns.
 
 -----------------------------------------------------------------------------
 
-**Scraping Emails Documentation**
+**Scraping Emails Overview**
 
-This script automates the extraction and organization of email responses for storage in a SQL database. Here's a brief overview:
+This script automates the extraction and organization of email responses for storage in a MS-SQL database. Here's a brief overview:
 
-1. **Imports:**
-   - Essential libraries and modules are imported, including `logging` for file-based logging, `pandas` for data handling, and custom modules for scraping and database operations.
+The parameters for scraping are subject line, and start date. These two are taken into account within the SMTP connection to search the inbox and outbox for given email data. Once data has been queried, it is separated into 3 sections, inbox, outbox, and thread. 
+Thread pairs any responses from sent messages, and uses (NLP) natural language processing to assess if feedback was positive or negative. 
 
-2. **Logging Configuration:**
-   - Configures logging to capture timestamped log messages in "Email_Scraper.log."
+All new emails sent, received are accounted for in the MS-SQL db. 
 
-3. **Main Function - `process`:**
-   - Takes parameters for the subject line, email address, and password.
-   - Scrapes inbox and outbox messages related to the specified subject.
-   - Processes and cleanses the data, combining it into a formatted dataframe.
-   - Specifies database connection details and creates a `DatabaseConnector` instance.
-   - Appends new records to the database and updates the 'reply_thread' column.
-   - Returns dataframes: `inbox`, `outbox`, `thread`, and `new_records`.
 
-4. **Function Execution:**
-   - Executes the `process` function with specific parameters and stores returned dataframes.
+Any emails sent out which get sent back due to a defective email are logged to the DB as unsubscribed. The process checks through all distinct subject lines in order to be up to date. 
+
+
 
 
 
