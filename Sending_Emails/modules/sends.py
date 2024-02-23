@@ -2,6 +2,7 @@ import smtplib
 from email.message import EmailMessage
 import logging
 import pandas as pd
+import time
 import os
 from Sending_Emails.modules.html_email_strings.baseball_intro import get_intro_template   #Dictates what template is being passed in into the body variable
 
@@ -22,11 +23,6 @@ class SendMail:
         smtp.login(EMAIL_ADDRESS_FROM, EMAIL_PASS)
         logging.info('SMTP connection created')
         return(smtp)
-    
-    #OLD PROCESS
-    #  with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-        #   smtp.login(EMAIL_ADDRESS_FROM, EMAIL_PASS)
-        #   smtp.send_message(msg)
 
 
     def send(SMTP_CONN, EMAIL_ADDRESS_FROM, EMAIL_PASS, global_subject_line, school, sport, email):
@@ -52,6 +48,15 @@ class SendMail:
         try:
             SMTP_CONN.send_message(msg)
 
+        except smtplib.SMTPConnectError as e:
+            print(f'SMTP Connection Error: {e}')
+            time.sleep(10)
+
+            SMTP_CONN_2 = SendMail.get_smtp_connection(EMAIL_ADDRESS_FROM, EMAIL_PASS)
+
+            if SMTP_CONN_2:
+                SMTP_CONN_2.send_message(msg)
+                
         except smtplib.SMTPRecipientsRefused as e:
             # Handle the specific exception
             print(f"Recipient error for {email}: {e}")

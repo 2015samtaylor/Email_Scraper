@@ -4,3 +4,5 @@ __pycache__/
 *.xlsx
 *.csv
 improvements.txt
+Logs/
+MySQL_Scripts/cp_db_testing.ipynb
