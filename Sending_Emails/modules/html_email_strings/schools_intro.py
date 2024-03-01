@@ -1,4 +1,4 @@
-def get_intro_template(school, unique_identifier, sport):
+def get_intro_template(school, sport):
     return f'''
     <!DOCTYPE html>
     <html>
@@ -54,7 +54,6 @@ def get_intro_template(school, unique_identifier, sport):
             </ul>
             <p>Ready to get started?</p>
             <p>Visit our website or give us a call to request a free sample and explore our catalog: <a href="http://customplanet.com" class="underline">customplanet.com</a>.</p>
-            <input type="hidden" id="hidden-uuid" value="{unique_identifier}">
             <div class="image-container">
                 <img src="https://lh3.googleusercontent.com/p/AF1QipMOx-lGQC-IlQwU0kBo5uP18BkuLrDoKAKGDS9h=s1360-w1360-h1020" alt="Customplanet Culture 1" width="300px">
                 <img src="https://lh3.googleusercontent.com/p/AF1QipNLF0i0wl_6Y4VF9vHJKpjGtMHhgT70_ADLww8j=s1360-w1360-h1020" alt="Customplanet Culture 2" width="300px">
