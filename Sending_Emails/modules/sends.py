@@ -8,15 +8,8 @@ from datetime import datetime
 import pytz
 import time
 import base64
-from Sending_Emails.modules.html_email_strings.schools_intro import get_intro_template 
+from Sending_Emails.modules.html_email_strings.schools_sport_focus import get_template 
 # from Sending_Emails.modules.html_email_strings.baseball_intro import get_intro_template   #Dictates what template is being passed in into the body variable
-
-
-
-
-#Change that needs to occur, same conn needs to be used in blast func
-
-
 
 
 class SendMail:
@@ -47,11 +40,12 @@ class SendMail:
         EMAIL_ADDRESS_FROM = email_config.EMAIL_ADDRESS_FROM
         EMAIL_PASS = email_config.EMAIL_PASS
         SMTP_CONN = email_config.SMTP_CONN
-        df = email_config.df
+    
         contact_column = email_config.contact_column
         sport = email_config.sport
         email_campaign_name = email_config.email_campaign_name
         email_subject_line = email_config.email_subject_line
+        # template = email_config.template
 
 
         msg = EmailMessage()
@@ -59,7 +53,7 @@ class SendMail:
         msg['From'] = EMAIL_ADDRESS_FROM
         msg['To'] = email_contact
             
-        body = get_intro_template(school, sport)  #These args are for School ONly rn
+        body = get_template(school, sport)  #These args are for School ONly rn
 
         # Set the content as HTML
         msg.set_content(body, subtype='html')
@@ -87,6 +81,8 @@ class SendMail:
     #Attempts to read from the output.csv everytime   
 
     def get_next_50(df):
+
+        #email_config does not exist here
 
         try:    
             email_history = pd.read_csv(os.getcwd() + '\\output.csv')
@@ -117,12 +113,13 @@ class SendMail:
         return(df_remaining)
     
 
-    def process(email_config, test=False):
+    def process(df, email_config, test=False):
+
+        #next 50 must be passed in as the df, otherwise it will keep running
 
         EMAIL_ADDRESS_FROM = email_config.EMAIL_ADDRESS_FROM
         EMAIL_PASS = email_config.EMAIL_PASS
         SMTP_CONN = email_config.SMTP_CONN
-        df = email_config.df
         contact_column = email_config.contact_column
         sport = email_config.sport
         email_campaign_name = email_config.email_campaign_name
@@ -157,7 +154,7 @@ class SendMail:
             #When running campaigns to non schools try except becomes relevant
             try:
                 school = row['HighSchools']
-                print(school)
+                print(index, school)
             except:
                 school = None
 
@@ -197,7 +194,7 @@ class SendMail:
 
 
 class EmailConfig:
-    def __init__(self, SMTP_CONN, EMAIL_ADDRESS_FROM, EMAIL_PASS, df, contact_column, sport, email_campaign_name,email_subject_line, template, server, database, table_name):
+    def __init__(self, SMTP_CONN, EMAIL_ADDRESS_FROM, EMAIL_PASS, df, contact_column, sport, email_campaign_name,email_subject_line, server, database, table_name):
      
         self.EMAIL_ADDRESS_FROM = EMAIL_ADDRESS_FROM
         self.EMAIL_PASS = EMAIL_PASS
@@ -209,7 +206,7 @@ class EmailConfig:
         self.sport = sport
         self.email_campaign_name = email_campaign_name
         self.email_subject_line = email_subject_line
-        self.template = template
+        # self.template = template
     
         self.server = server
         self.database = database
