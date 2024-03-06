@@ -56,7 +56,7 @@ class scrape:
             # email_ids = email_ids[:100]
             if email_ids:
                 print(f"{log_type} You have {len(email_ids)} email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
-                logging.info(f"{log_type} You have email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
+                logging.info(f"{log_type} You have {len(email_ids)} email responses to the specified search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
             else:
                 print(f"{log_type} There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
                 logging.info(f"{log_type} There are no responses to the specified emails search criteria {subject_line} in the {inbox_or_outbox} with a filter date of {start_date}")
@@ -324,29 +324,3 @@ class scrape:
 
         return(outbox)
     
-
-
-
-
-    # class EmailConfig:
-    # def __init__(self, SMTP_CONN, EMAIL_ADDRESS_FROM, EMAIL_PASS, df, contact_column, sport, email_campaign_name,email_subject_line, server, database, table_name):
-     
-    #     self.EMAIL_ADDRESS_FROM = EMAIL_ADDRESS_FROM
-    #     self.EMAIL_PASS = EMAIL_PASS
-        
-    #     self.SMTP_CONN = SMTP_CONN
-    #     self.df = df
-
-    #     self.contact_column = contact_column
-    #     self.sport = sport
-    #     self.email_campaign_name = email_campaign_name
-    #     self.email_subject_line = email_subject_line
-    #     # self.template = template
-    
-    #     self.server = server
-    #     self.database = database
-    #     self.table_name = table_name
-
-       
-
-

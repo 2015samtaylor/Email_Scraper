@@ -194,7 +194,7 @@ class SendMail:
 
 
 class EmailConfig:
-    def __init__(self, SMTP_CONN, EMAIL_ADDRESS_FROM, EMAIL_PASS, df, contact_column, sport, email_campaign_name,email_subject_line, server, database, table_name):
+    def __init__(self, SMTP_CONN=None, EMAIL_ADDRESS_FROM=None, EMAIL_PASS=None, df=None, contact_column=None, sport=None, email_campaign_name=None,email_subject_line=None, server=None, database=None, table_name=None, filter_date=None, db_pass=None, db_user=None):
      
         self.EMAIL_ADDRESS_FROM = EMAIL_ADDRESS_FROM
         self.EMAIL_PASS = EMAIL_PASS
@@ -211,6 +211,10 @@ class EmailConfig:
         self.server = server
         self.database = database
         self.table_name = table_name
+
+        self.db_pass = db_pass
+        self.db_user = db_user
+        self.filter_date = filter_date
 
 
 

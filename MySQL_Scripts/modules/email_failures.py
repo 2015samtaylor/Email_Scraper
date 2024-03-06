@@ -24,7 +24,7 @@ def find_bad_emails(outbox, failures, subject_line):
             #When outbox is empty here, failures is still present
 
             if outbox.empty:
-                logging.info('No messages brought back from the outbox with {subject_line}, can not link up to find bad emails')
+                logging.info(f'No messages brought back from the outbox with {subject_line}, can not link up to find bad emails')
             else:
                 pass
 
@@ -89,8 +89,8 @@ def update_bad_emails(df):
 
             # Commit the changes
             conn.commit()
-            print('All new emails sent updated succesfully')
-            logging.info('All new emails sent updated succesfully')
+            print('All bad emails updated succesfully in db')
+            logging.info('All bad emails updated succesfully in db')
         
         except Exception as e:
             print(f'Second except block An error occured: {e}')

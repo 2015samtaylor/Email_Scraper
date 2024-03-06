@@ -10,15 +10,15 @@ import logging
 
 class DatabaseConnector:
 
-    def __init__(self, server, database, username, password, sql_db, sql_table):
+    def __init__(self, server, username, password, sql_db, sql_table):
         self.server = server
-        self.database = database
         self.username = username
         self.password = password
-        self.conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={self.server};DATABASE={self.database};UID={self.username};PWD={self.password}'
-        self.conn = pyodbc.connect(self.conn_str)
         self.sql_db = sql_db
         self.sql_table = sql_table
+        self.conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={self.server};DATABASE={self.sql_db};UID={self.username};PWD={self.password}'
+        self.conn = pyodbc.connect(self.conn_str)
+    
 
     def SQL_query(self, query):
         df_SQL = pd.read_sql_query(query, con=self.conn)
