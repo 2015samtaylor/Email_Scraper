@@ -23,6 +23,11 @@ def find_bad_emails(outbox, failures, subject_line):
 
             #When outbox is empty here, failures is still present
 
+            if outbox.empty:
+                logging.info('No messages brought back from the outbox with {subject_line}, can not link up to find bad emails')
+            else:
+                pass
+
             failures = pd.merge(outbox, failures, left_on='message_id', right_on='references_failed')   #merge the reference id on the initial outbound message
           
             failures = failures.rename(columns = {'to': 'emailaddress'})
@@ -85,11 +90,12 @@ def update_bad_emails(df):
             # Commit the changes
             conn.commit()
             print('All new emails sent updated succesfully')
+            logging.info('All new emails sent updated succesfully')
         
         except Exception as e:
             print(f'Second except block An error occured: {e}')
-            print(type(e)) 
-
+            logging.info(f'Second except block An error occured: {e}')
+        
         finally:
             conn.close()
 
@@ -116,7 +122,7 @@ def gather_and_send_bad_emails_to_db(subject_line, email_address, email_pass, lo
     #Get all outbox emails based on subject line and start date
     msgs_outbox = scrape.scrape_msgs_outbox_or_inbox('outbox', subject_line, email_address, email_pass, formatted_date, log_type)
     outbox = scrape.create_msg_frame(msgs_outbox)
-    outbox = scrape.cleanse_frame(outbox, 'outbox')
+    # outbox = scrape.cleanse_frame(outbox, 'outbox')
 
     # Find emails with delivery status notification flags, link those to what was sent, and write those emails to the CP db
     failures = scrape.scrape_msgs_outbox_or_inbox('inbox', 'Delivery Status Notification', email_address, email_pass, formatted_date, log_type)
@@ -132,3 +138,5 @@ def gather_and_send_bad_emails_to_db(subject_line, email_address, email_pass, lo
     else:
         print('No emails to update')
         logging.info('No bad emails to update')
+
+    return(failures)

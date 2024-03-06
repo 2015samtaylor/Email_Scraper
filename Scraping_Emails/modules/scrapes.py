@@ -109,7 +109,6 @@ class scrape:
         email_data = []
 
         for i, msg in enumerate(msgs[::-1]):  # start from the most recent message
-            print(i)
             if isinstance(msg, tuple):
                 response_part = msg
             else:   
@@ -200,9 +199,12 @@ class scrape:
             #extract emails addresses from to & from columns
             df['to'] = df['to'].apply(lambda x: re.search(r'<([^<>]+)>', x).group(1) if '<' in x and '>' in x else x)
             df['from'] = df['from'].apply(lambda x: re.search(r'<([^<>]+)>', x).group(1) if '<' in x and '>' in x else x)
-        
-        except KeyError:
+
+        except (KeyError, TypeError) as e:
             pass
+    
+        except Exception as e:
+            print(f"An unexpected error occurred: {type(e).__name__} - {e}")
         
         
         if inbox_or_outbox == 'outbox':
@@ -321,6 +323,29 @@ class scrape:
             logging.error(f'Error in map_reply_outbox: {e}')
 
         return(outbox)
+    
+
+
+
+
+    # class EmailConfig:
+    # def __init__(self, SMTP_CONN, EMAIL_ADDRESS_FROM, EMAIL_PASS, df, contact_column, sport, email_campaign_name,email_subject_line, server, database, table_name):
+     
+    #     self.EMAIL_ADDRESS_FROM = EMAIL_ADDRESS_FROM
+    #     self.EMAIL_PASS = EMAIL_PASS
+        
+    #     self.SMTP_CONN = SMTP_CONN
+    #     self.df = df
+
+    #     self.contact_column = contact_column
+    #     self.sport = sport
+    #     self.email_campaign_name = email_campaign_name
+    #     self.email_subject_line = email_subject_line
+    #     # self.template = template
+    
+    #     self.server = server
+    #     self.database = database
+    #     self.table_name = table_name
 
        
 
