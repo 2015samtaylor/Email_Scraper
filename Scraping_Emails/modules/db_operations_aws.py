@@ -86,6 +86,9 @@ class DatabaseConnector:
         engine = self.generate_sql_engine()
         dtypes = self.get_dtypes(self.sql_db, self.sql_table)
 
+        frame['to'] = frame['to'].astype(str) #for header dtypes issues
+        frame['from'] = frame['from'].astype(str)
+
         #This is present in order to update the reply_thread updates in thread table
         if update_column:
             # Update only the specified column

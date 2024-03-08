@@ -81,13 +81,13 @@ def get_template(school, sport):
             
             This is Chris with Customplanet; we are a local company that provides custom sports apparel, spirit packs, hoodies, hats, team uniforms, and much more. I wanted to drop a message to provide a local option for all of your school sports needs. 
             
-            <br><br> As an e-commerce website established in 2009, we have done almost 10 million in sales serving local schools and customers around the world. Our mission is to establish lifelong customers. </br></br>
-                            
+            
             <p>Why choose us?</p>
             <ul>
                 <li>Local Expertise in the KC area paired with Quality Customer Service</li>
                 <li>Customization Options, and Superior Quality </li>
                 <li>Quick Turnaround: Fast and efficient service to meet those tight schedules.</li>
+                <li>Reliablity: an e-commerce website established in 2009, we have done almost 10 million in sales serving local schools and customers around the world.</li>
             </ul>
            
             <p>We offer free samples and quotes! Hope we can help you in the near future!</p>
