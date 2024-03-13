@@ -126,3 +126,7 @@ def get_template(school, sport):
     '''
 
 
+#ideas. 
+#Reply to email, and get code for 10% off
+#Send email with QR Code, scan for special offer. 
+#Make the social media icons smaller

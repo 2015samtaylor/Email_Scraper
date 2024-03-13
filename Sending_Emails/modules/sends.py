@@ -2,6 +2,7 @@ import smtplib
 from email.message import EmailMessage
 import logging
 import pandas as pd
+import numpy as np
 import time
 import os
 from datetime import datetime
@@ -91,9 +92,14 @@ class SendMail:
                 
             # Find the index in df where the 'email' column matches the last_email_sent
             index_to_start = df[df['email'] == last_email_sent].index.max() + 1
-                
-            # # Process df starting from the index_to_start
-            df_remaining = df.loc[index_to_start: index_to_start + 50]
+
+            if np.isnan(index_to_start):    #So if index_to_start is nan. Then let df be itself. 
+                print('Could not match last email sent to master frame, proceeding with original frame')
+                df_remaining = df
+            else:
+                print("Matched last email sent to master frame, proceding from last email sent")
+                # # Process df starting from the index_to_start
+                df_remaining = df.loc[index_to_start: index_to_start + 50]
 
         except FileNotFoundError:
             print('Output is not created, first run of 50 emails preparing to be sent')
@@ -111,6 +117,7 @@ class SendMail:
             df_remaining = pd.DataFrame()
 
         return(df_remaining)
+    
     
 
     def process(df, email_config, test=False):
