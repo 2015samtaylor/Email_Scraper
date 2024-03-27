@@ -1,12 +1,11 @@
-def get_template(sport, **kwargs):
+def get_template(**kwargs):
 
-    #Define everything in kwargs, even sport therefore it simplifies it down
+    #Call upon columns defined in the optional_iterated_columns
 
     sport = kwargs.get('sport', '')
-    school = kwargs.get('school', '')
-    level = kwargs.get('level', '')
-
-
+    school = kwargs.get('HighSchools', '')
+    level = kwargs.get('Level', '')
+    
     return f'''
     <!DOCTYPE html>
     <html>
@@ -104,19 +103,19 @@ def get_template(sport, **kwargs):
             <div class="image-container">
                 <div class="social-icons">
                     <a href="https://www.customplanet.com/" target="_blank">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9Jolo0qsbBbemgBEHbuhLUnXtFVxuA9FPXuZj07YnIA&s" alt="Customplanet Logo" width="80px">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9Jolo0qsbBbemgBEHbuhLUnXtFVxuA9FPXuZj07YnIA&s" alt="Customplanet Logo" width="60px">
                     </a>
 
                     <a href="https://twitter.com/customplanet" target="_blank">
-                        <img src="https://1000logos.net/wp-content/uploads/2017/02/Twitter-Logosu.png" alt="Twitter Logo" width="95px">
+                        <img src="https://1000logos.net/wp-content/uploads/2017/02/Twitter-Logosu.png" alt="Twitter Logo" width="60px">
                     </a>
 
                     <a href="https://www.facebook.com/CustomPlanetDotCom/" target="_blank">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Facebook_icon.svg/2048px-Facebook_icon.svg.png" alt="Facebook Logo" width="70px">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Facebook_icon.svg/2048px-Facebook_icon.svg.png" alt="Facebook Logo" width="40px">
                     </a>
 
                     <a href="https://www.instagram.com/customplanetinc/" target="_blank">
-                        <img src="https://cdn.mos.cms.futurecdn.net/6dDoc8GV9fYUPExgLYPqqT-1200-80.jpg" alt="Instagram Logo" width="110px">
+                        <img src="https://cdn.mos.cms.futurecdn.net/6dDoc8GV9fYUPExgLYPqqT-1200-80.jpg" alt="Instagram Logo" width="80px">
                     </a>
                 </div>
             </div>
@@ -137,4 +136,9 @@ def get_template(sport, **kwargs):
 #ideas. 
 #Reply to email, and get code for 10% off
 #Send email with QR Code, scan for special offer. 
+
 #Make the social media icons smaller
+#Add sport pic in the top
+#Put name of recipient in the email
+
+#Add these args into teh email config
